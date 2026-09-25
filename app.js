@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var D = window.SPLIT_DATA;
-  var KEY = 'pbsplit-demo-v1';
+  var KEY = 'pbsplit-demo-v2';
   var VIEWER = D.viewerId;
   var M = {}; D.members.forEach(function (m) { M[m.id] = m; });
   var IDS = D.members.map(function (m) { return m.id; });
@@ -122,7 +122,7 @@
     { t: 'דילוג למוצ״ש', h: 'בפס ההדגמה למעלה: "דילוג למוצ״ש". החברים כבר רשמו הוצאות.', done: function () { return S.time !== 'fri'; }, go: 'tab' },
     { t: 'הוספת הוצאה', h: 'לוחצים "+ הוצאה". חלוקה שווה כבר מסומנת - רק שומרים.', done: function () { return S.viewerAdded; }, go: 'tab' },
     { t: 'מי חייב למי', h: 'עוברים ל"מי חייב למי" - כמה העברות במקום עשרות.', done: function () { return S.balancesViewed; }, go: 'balances' },
-    { t: 'אריאל בלי האפליקציה', h: 'לוחצים "איך אריאל רואה את זה?" - צפייה בדפדפן, ותשלום בביט שנעה מסמנת.', done: function () { return S.danaMarked; }, go: 'web' },
+    { t: 'אריאל בלי האפליקציה', h: 'לוחצים "איך אריאל רואה את זה?" - צפייה בדפדפן, ותשלום במזומן שנעה מסמנת.', done: function () { return S.danaMarked; }, go: 'web' },
     { t: 'דילוג ליום ראשון', h: 'בפס ההדגמה: "דילוג ליום ראשון". חוזרים לדף הבית.', done: function () { return S.time === 'sun'; }, go: 'home' },
     { t: 'סגירת החוב', h: 'בכרטיס בדף הבית: "לסגור עכשיו" ואז אישור "לשלם ב-PayBox".', done: function () { return S.closed; }, go: 'home' }
   ];
@@ -221,7 +221,7 @@
       '<div><span class="lbl">מסתיים (חובה)</span><div class="input ro" dir="ltr">' + D.tab.end + '</div></div></div>' +
       '<p class="muted small">תאריך הסיום קובע מתי מתחיל שבוע הסגירה.</p>' +
       '<span class="lbl">מי בא?</span><div class="chips">' +
-      friends.map(function (id) { return '<span class="chip on">' + avatar(id, 'sm') + esc(M[id].name) + (M[id].wallet === 'bit' ? ' <small>(ביט)</small>' : '') + '</span>'; }).join('') +
+      friends.map(function (id) { return '<span class="chip on">' + avatar(id, 'sm') + esc(M[id].name) + (M[id].wallet === 'cash' ? ' <small>(בלי האפליקציה)</small>' : '') + '</span>'; }).join('') +
       '</div>' +
       '<p class="note">חברים בלי PayBox יכולים לראות את החשבון מהדפדפן, בלי להירשם.</p>' +
       '<p class="muted small">בהדגמה הפרטים ממולאים מראש.</p>' +
@@ -295,15 +295,15 @@
     var head = '<p class="netting">במקום <strong>' + naiveCount() + '</strong> העברות קטנות - <strong>' + (ts.length + S.payments.length) + '</strong> בלבד</p>';
     var rows = S.payments.map(function (p) {
       return '<li class="tr done">' + avatar(p.from, 'sm') + '<span class="tr-names">' + esc(name(p.from)) + ' <span aria-hidden="true">←</span><span class="sr"> ל</span> ' + esc(name(p.to)) + '</span>' + money(p.amount) +
-        '<span class="st ok">' + icon('check') + (p.rail === 'paybox' ? ' שולם ב-PayBox' : ' סומן כסגור - ' + (p.rail === 'bit' ? 'ביט' : 'מזומן')) + '</span></li>';
+        '<span class="st ok">' + icon('check') + (p.rail === 'paybox' ? ' שולם ב-PayBox' : ' סומן כסגור - מזומן') + '</span></li>';
     }).concat(ts.map(function (t) {
       var act = '<span class="st wait">פתוח</span>';
       if (t.from === VIEWER) act = S.time === 'sun' || S.time === 'sat' ? '<button class="btn coral sm' + hint(7) + '" data-a="settle" data-to="' + t.to + '" aria-label="לשלם ' + fmt(t.amount) + ' שקלים ל' + esc(name(t.to)) + '">לשלם</button>' : act;
       else if (t.to === VIEWER) act = '<button class="btn ghost sm" data-a="mark" data-from="' + t.from + '" aria-label="סמן כסגור את החוב של ' + esc(name(t.from)) + ', ' + fmt(t.amount) + ' שקלים">סמן כסגור</button>';
-      return '<li class="tr' + (t.from === VIEWER ? ' mine' : '') + '">' + avatar(t.from, 'sm') + '<span class="tr-names">' + esc(name(t.from)) + ' <span aria-hidden="true">←</span><span class="sr"> ל</span> ' + esc(name(t.to)) + (M[t.from].wallet === 'bit' ? ' <small class="bit">ביט</small>' : '') + '</span>' + money(t.amount) + act + '</li>';
+      return '<li class="tr' + (t.from === VIEWER ? ' mine' : '') + '">' + avatar(t.from, 'sm') + '<span class="tr-names">' + esc(name(t.from)) + ' <span aria-hidden="true">←</span><span class="sr"> ל</span> ' + esc(name(t.to)) + (M[t.from].wallet === 'cash' ? ' <small class="cashtag">מזומן</small>' : '') + '</span>' + money(t.amount) + act + '</li>';
     })).join('');
     return head + '<ul class="trs">' + rows + '</ul>' +
-      '<p class="muted small">חוב נסגר כשמשלמים ב-PayBox, או כשמי שמגיע לו הכסף מסמן שקיבל בביט או במזומן.</p>' +
+      '<p class="muted small">חוב נסגר כשמשלמים ב-PayBox, או כשמי שמגיע לו הכסף מסמן שקיבל במזומן.</p>' +
       (S.time !== 'fri' ? '<button class="btn ghost wide' + hint(5) + '" data-a="nav" data-to="web">איך אריאל רואה את זה? (בלי האפליקציה)</button>' : '');
   }
 
@@ -341,18 +341,18 @@
     var paid = S.payments.filter(function (p) { return p.from === 'roni'; });
     var logged = S.expenses.filter(function (e) { return e.loggedBy === 'roni'; });
     var bal = mine.length ? '<p>יש לך חוב של</p><strong class="bigmoney">' + money(mine.reduce(function (n, t) { return n + t.amount; }, 0)) + '</strong><p>' + mine.map(function (t) { return money(t.amount) + ' ל' + esc(name(t.to)); }).join(' · ') + '</p>'
-      : paid.length ? '<p>' + icon('check') + ' החוב שלך סגור</p><p class="muted small">' + esc(name(paid[0].to)) + ' סימנה שקיבלה ' + (paid[0].rail === 'bit' ? 'בביט' : 'במזומן') + '</p>' : '<p>אצלך הכל מאוזן</p>';
+      : paid.length ? '<p>' + icon('check') + ' החוב שלך סגור</p><p class="muted small">' + esc(name(paid[0].to)) + ' סימנה שקיבלה במזומן</p>' : '<p>אצלך הכל מאוזן</p>';
     return '<div class="browser"><div class="urlbar">' + icon('lock') + '<span dir="ltr">' + D.tab.link + '</span></div></div>' +
       '<section class="pad web">' +
-      '<p class="viewing">כך אריאל, שמשתמש רק בביט, רואה את החשבון מהקישור בוואטסאפ - בלי אפליקציה ובלי הרשמה.</p>' +
+      '<p class="viewing">כך אריאל, שאין לו את PayBox, רואה את החשבון מהקישור בוואטסאפ - בלי אפליקציה ובלי הרשמה.</p>' +
       '<div class="webbrand"><img src="assets/logo.svg" alt="" width="28" height="28"> PayBox Split</div>' +
       '<h1 tabindex="-1">היי אריאל</h1><p class="muted">הוזמנת לחשבון "' + esc(D.tab.name) + '" · ' + IDS.length + ' חברים</p>' +
       '<div class="mycard ' + (mine.length ? 'owe' : 'even') + '">' + bal + '</div>' +
       '<h3 class="sec">מה רשמת</h3><ul class="exp">' + logged.map(function (e) { return '<li class="exp-row static">' + avatar('roni') + '<span class="exp-txt"><strong>' + esc(e.title) + '</strong><span class="muted small">נרשם מהדפדפן</span></span>' + money(e.amount * 100) + '</li>'; }).join('') + '</ul>' +
       (mine.length ?
         '<button class="btn primary big" data-a="signup">לשלם ב-PayBox</button><p class="muted small center">הרשמה קצרה רק ברגע התשלום</p>' +
-        '<div class="note">משלמים בביט או במזומן? מעבירים ל' + esc(name(mine[0].to)) + ' כרגיל, ומי שמקבל את הכסף מסמן בחשבון שהחוב נסגר.</div>' +
-        '<button class="btn coral wide' + hint(5) + '" data-a="nav" data-to="dana">אריאל העביר בביט - לראות את הצד של ' + esc(name(mine[0].to)) + '</button>' : '') +
+        '<div class="note">משלמים במזומן? נותנים ל' + esc(name(mine[0].to)) + ' את הכסף ביד, ומי שמקבל את הכסף מסמן בחשבון שהחוב נסגר.</div>' +
+        '<button class="btn coral wide' + hint(5) + '" data-a="nav" data-to="dana">אריאל שילם במזומן - לראות את הצד של ' + esc(name(mine[0].to)) + '</button>' : '') +
       '<button class="btn ghost wide" data-a="nav" data-to="balances">חזרה לאפליקציה של יובל</button></section>';
   }
 
@@ -362,11 +362,10 @@
     if (!t) body = '<p class="ok">' + icon('check') + ' אין לאריאל חוב פתוח.</p><button class="btn primary big" data-a="nav" data-to="balances">חזרה ליובל</button>';
     else {
       var cred = name(t.to);
-      body = '<p class="viewing">עכשיו אנחנו בטלפון של ' + esc(cred) + '. אריאל העביר לה ' + money(t.amount) + ' בביט.</p>' +
+      body = '<p class="viewing">עכשיו אנחנו בטלפון של ' + esc(cred) + '. אריאל נתן לה ' + money(t.amount) + ' במזומן.</p>' +
         '<div class="card"><div class="dana-row">' + avatar('roni') + '<span><strong>אריאל</strong><span class="muted small"> חייב לך</span></span>' + money(t.amount) + '</div>' +
         '<p>קיבלת את הכסף מחוץ ל-PayBox?</p>' +
-        '<button class="btn primary big' + hint(5) + '" data-a="dmark" data-rail="bit">קיבלתי בביט - סמן כסגור</button>' +
-        '<button class="btn ghost wide" data-a="dmark" data-rail="cash">קיבלתי במזומן</button></div>' +
+        '<button class="btn primary big' + hint(5) + '" data-a="dmark" data-rail="cash">קיבלתי במזומן - סמן כסגור</button></div>' +
         '<p class="muted small">רק מי שמגיע לו הכסף יכול לסמן חוב כסגור - לא החייב.</p>';
     }
     return header('הטלפון של ' + (t ? esc(name(t.to)) : 'נעה'), 'web') + '<section class="pad">' + body + '</section>';
@@ -436,7 +435,7 @@
       '<p class="small muted">תקין: עד ' + K.guardrail.ok + '% · מעל ' + K.guardrail.stop + '% עוצרים ומתקנים. אפשר להדמות אירוע חיכוך: "יציאה מהחשבון" בתפריט, או "יש פה טעות" בהוצאה של מישהו אחר (האירוע נרשם, המצב לא משתנה).</p></div>' +
       '<div class="kpi slim"><h4>' + K.usability.name + ' (מבחן שמישות)</h4><p class="kpi-val">' + (lastAdd == null ? '-' : lastAdd + ' שניות') + ' <span class="muted small">יעד בבדיקות: פחות מ-' + K.usability.target + ' שניות</span></p></div>' +
       '<h3>יומן אירועים</h3><ol class="evlog" reversed>' + (S.events.length ? S.events.slice().reverse().map(function (e) {
-        return '<li><code dir="ltr">' + e.n + '</code> <span>' + (EV[e.n] || e.n) + (e.p.rail ? ' (' + e.p.rail + ')' : '') + (e.story ? ' <em>· חלק מהסיפור</em>' : '') + '</span><span class="muted small">' + e.t + '</span></li>';
+        return '<li><code dir="ltr">' + e.n + '</code> <span>' + (EV[e.n] || e.n) + (e.p.rail ? ' (' + (e.p.rail === 'paybox' ? 'PayBox' : 'מזומן') + ')' : '') + (e.story ? ' <em>· חלק מהסיפור</em>' : '') + '</span><span class="muted small">' + e.t + '</span></li>';
       }).join('') : '<li class="muted">עוד אין אירועים - התחילו את ההדגמה.</li>') + '</ol>' +
       '<button class="btn ghost wide" data-a="reset">' + icon('reset') + ' איפוס הדגמה</button>';
   }
@@ -533,7 +532,7 @@
       '<p class="fake">תשלום דמה - לא עובר כסף אמיתי ואין חיוב</p>' +
       (walletBalance() >= t.amount ? '<button class="btn primary big' + hint(7) + '" data-a="pay" data-to="' + to + '">לשלם ' + money(t.amount) + ' ב-PayBox (דמה)</button>'
         : '<p class="err">אין מספיק יתרה בארנק הדמה לתשלום הזה</p>') +
-      '<p class="muted small center">שילמת בביט או במזומן? מי שמגיע לו הכסף מסמן את החוב כסגור.</p>' +
+      '<p class="muted small center">שילמת במזומן? מי שמגיע לו הכסף מסמן את החוב כסגור.</p>' +
       '<button class="btn link" data-a="closesheet">ביטול</button>');
   }
 
@@ -553,7 +552,7 @@
       var ts = transfers().filter(function (t) { return t.from !== VIEWER && t.to !== VIEWER; });
       if (!ts.length) break;
       ts.forEach(function (t) {
-        var rail = M[t.from].wallet === 'bit' ? 'bit' : 'paybox';
+        var rail = M[t.from].wallet === 'cash' ? 'cash' : 'paybox';
         S.payments.push({ from: t.from, to: t.to, amount: t.amount, rail: rail });
         track(rail === 'paybox' ? 'settled_paybox' : 'marked_settled', { from: t.from, to: t.to, rail: rail }, true);
       });
@@ -621,8 +620,8 @@
     },
     mark: function (el) {
       var from = el.dataset.from;
-      sheet('<h2 id="sheetTitle">' + esc(name(from)) + ' שילם מחוץ ל-PayBox?</h2><button class="btn primary wide" data-a="vmark" data-from="' + from + '" data-rail="bit">קיבלתי בביט - סמן כסגור</button>' +
-        '<button class="btn ghost wide" data-a="vmark" data-from="' + from + '" data-rail="cash">קיבלתי במזומן</button><button class="btn link" data-a="closesheet">ביטול</button>');
+      sheet('<h2 id="sheetTitle">' + esc(name(from)) + ' שילם מחוץ ל-PayBox?</h2><button class="btn primary wide" data-a="vmark" data-from="' + from + '" data-rail="cash">קיבלתי במזומן - סמן כסגור</button>' +
+        '<button class="btn link" data-a="closesheet">ביטול</button>');
     },
     vmark: function (el) {
       var t = owedToMe().filter(function (x) { return x.from === el.dataset.from; })[0]; if (!t) return;

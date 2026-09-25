@@ -17,7 +17,7 @@ window.SPLIT_DATA = {
     { id: 'itai',  name: "ג'קי", wallet: 'paybox', color: '#3E5C8A' },
     { id: 'gal',   name: 'גל',   wallet: 'paybox', color: '#7A4E9E' },
     { id: 'maya',  name: 'סאלי', wallet: 'paybox', color: '#8A6A12' },
-    { id: 'roni',  name: 'אריאל', wallet: 'bit',    color: '#2F7D7A' }
+    { id: 'roni',  name: 'אריאל', wallet: 'cash',   color: '#2F7D7A' }
   ],
   // expenses 1-7 exist when the story jumps to Saturday night; #8 is added live by the viewer
   seedExpenses: [

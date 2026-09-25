@@ -17,9 +17,8 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 | `app.js` | Hash router, ledger maths (agorot integers, greedy fewest transfers), event log, PM metrics |
 | `assets/logo.svg` | Original mark: a receipt with a zig-zag edge cut into two halves |
 
-
 ## Grader walkthrough (about 90 seconds)
-בואו נתחיל -> פותחים חשבון -> יוצרים ומזמינים -> שולחים בוואטסאפ -> דילוג למוצ״ש -> + הוצאה -> שומרים (530 -> 380) -> מי חייב למי (5 instead of 38) -> איך אריאל רואה את זה? -> לראות את הצד של נעה -> קיבלתי בביט -> דילוג ליום ראשון -> לסגור עכשיו -> לשלם ב-PayBox -> סגרנו! -> מה זה אומר למנהל המוצר?
+בואו נתחיל -> פותחים חשבון -> יוצרים ומזמינים -> שולחים בוואטסאפ -> דילוג למוצ״ש -> + הוצאה -> שומרים (530 -> 380) -> מי חייב למי (5 instead of 38) -> איך אריאל רואה את זה? -> אריאל שילם במזומן - לראות את הצד של נעה -> קיבלתי במזומן - סמן כסגור -> דילוג ליום ראשון -> לסגור עכשיו -> לשלם ב-PayBox -> סגרנו! -> מה זה אומר למנהל המוצר?
 
 ## MVP features -> screens
 | Feature | Where |
@@ -27,8 +26,8 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 | F1 open tab + invite link; invitee views without signup, signup only at settle | `#/create`, `#/invite`, `#/web` (אריאל) |
 | F2 add expense, equal split preselected, untick who wasn't there | `#/add` |
 | F3 who owes whom, fewest transfers | `#/balances` |
-| F4 one-tap settle in PayBox, or creditor marks settled (Bit/cash) | settle sheet, `#/dana`, "סמן כסגור" rows |
-| Not built (cut from the MVP) | reminders, custom split, receipt photo/OCR, multi-currency, recurring bills, direct Bit rail, payment links |
+| F4 one-tap settle in PayBox, or creditor marks settled (cash - "קיבלתי במזומן") | settle sheet, `#/dana`, "סמן כסגור" rows |
+| Not built (cut from the MVP) | reminders, custom split, receipt photo/OCR, multi-currency, recurring bills, payment links. The UI never names a competitor wallet: anyone outside PayBox pays in cash (team decision 2026-09-25) |
 
 ## Psychology map (principle -> screen -> element)
 | Principle | Screen | Concrete UI element |

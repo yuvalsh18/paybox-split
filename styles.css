@@ -180,7 +180,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .st.ok { color: var(--ok); }
 .st.wait { color: var(--muted); }
 .st .ic { width: 15px; height: 15px; }
-.bit { background: #E6EEF7; color: #24476F; border-radius: 6px; padding: 0 6px; font-size: 12px; }
+.cashtag { background: #E6EEF7; color: #24476F; border-radius: 6px; padding: 0 6px; font-size: 12px; }
 
 /* ---------- add ---------- */
 .amtwrap { display: flex; align-items: center; gap: 8px; }
