@@ -26,7 +26,7 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 | F1 open tab + invite link; invitee views without signup, signup only at settle | `#/create`, `#/invite`, `#/web` (אריאל) |
 | F2 add expense, equal split preselected, untick who wasn't there | `#/add` |
 | F3 who owes whom, fewest transfers | `#/balances` |
-| F4 one-tap settle in PayBox, or creditor marks settled (cash - "קיבלתי במזומן") | settle sheet, `#/dana`, "סמן כסגור" rows |
+| F4 one-tap settle in PayBox, or creditor marks settled (cash - "קיבלתי במזומן") | settle sheet, `#/creditor`, "סמן כסגור" rows |
 | Not built (cut from the MVP) | reminders, custom split, receipt photo/OCR, multi-currency, recurring bills, payment links. The UI never names a competitor wallet: anyone outside PayBox pays in cash (team decision 2026-09-25) |
 
 ## Psychology map (principle -> screen -> element)

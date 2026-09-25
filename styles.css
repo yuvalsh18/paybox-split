@@ -243,8 +243,8 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .webbrand .g-wm { font-size: 20px; }
 .web h1 { font-size: 24px; }
 .exp-row.static { list-style: none; }
-.dana-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.dana-row .money { flex: none; font-weight: 700; font-size: 20px; }
+.cred-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.cred-row .money { flex: none; font-weight: 700; font-size: 20px; }
 
 /* ---------- done ---------- */
 .done-s { text-align: center; padding: 26px 22px; position: relative; overflow: hidden; min-height: 100%; background: linear-gradient(180deg, var(--blue-l), var(--bg) 60%); }
@@ -318,8 +318,8 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .wa-link { color: #1B5FA6; text-decoration: underline; font-weight: 500; align-self: flex-end; }
 .sheet .err { font-weight: 600; }
 [tabindex="-1"]:focus, [tabindex="-1"]:focus-visible { outline: none; box-shadow: none; }
-.dana-row span { flex: none; }
-.dana-row > span:not(.av) { flex: 1; }
+.cred-row span { flex: none; }
+.cred-row > span:not(.av) { flex: 1; }
 
 /* ---------- mobile: full screen ---------- */
 @media (max-width: 700px) {
@@ -465,3 +465,13 @@ strong, b { font-weight: 600; }
 .bal-int span { display: inline-flex; align-items: center; gap: 5px; background: rgba(0, 40, 90, .25); border-radius: 99px; padding: 5px 10px; }
 .bal-int .ic { width: 18px; height: 18px; }
 .start-wm { font-weight: 500; }
+/* browser-test fixes (P4-07) */
+.toast { top: 108px; bottom: auto; transform: translateY(-8px); }
+.tile.pulse { animation: none; }
+.tile.pulse .tile-ic { animation: pulse 1.8s ease-out infinite; }
+.scrim { background: rgba(15, 30, 45, .5); }
+.sheet-wrap { z-index: 50; }
+.screen.r-home { scroll-padding-bottom: 130px; }
+body.sheet-open .guide::after, body.sheet-open .pm::after { content: ''; position: absolute; inset: 0; background: rgba(15, 30, 45, .5); border-radius: inherit; pointer-events: none; }
+body.sheet-open .pm { position: sticky; }
+@media (max-width: 700px) { .toast { top: 62px; bottom: auto; } body.sheet-open .pm { position: fixed; } }

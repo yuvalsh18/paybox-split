@@ -12,7 +12,7 @@
     return {
       v: 1, route: 'start', created: false, invited: false, time: 'fri',
       expenses: [], payments: [], events: [],
-      viewerAdded: false, balancesViewed: false, webViewed: false, danaMarked: false,
+      viewerAdded: false, balancesViewed: false, webViewed: false, creditorMarked: false,
       closed: false, friction: 0, addTimes: [], tabView: 'expenses', pmOpen: false,
       guideOpen: false, animFrom: null, nextTabIntent: false
     };
@@ -130,27 +130,28 @@
 
   /* ---------- guide steps ---------- */
   var STEPS = [
-    { t: 'פתיחת חשבון לטיול', h: 'בדף הבית לוחצים על "פותחים חשבון".', done: function () { return S.created; }, go: 'home' },
+    { t: 'פתיחת חשבון לטיול', h: 'בדף הבית לוחצים על האריח PayBox Split עם התג "חדש".', done: function () { return S.created; }, go: 'home' },
     { t: 'הזמנת החברים בקישור', h: 'שולחים את הקישור לקבוצת הוואטסאפ.', done: function () { return S.invited; }, go: 'invite' },
-    { t: 'דילוג למוצ״ש', h: 'בפס ההדגמה למעלה: "דילוג למוצ״ש". החברים כבר רשמו הוצאות.', done: function () { return S.time !== 'fri'; }, go: 'tab' },
+    { t: 'דילוג למוצ״ש', h: 'במדריך, תחת "זמן בהדגמה": "דילוג למוצ״ש". החברים כבר רשמו הוצאות.', done: function () { return S.time !== 'fri'; }, go: 'tab' },
     { t: 'הוספת הוצאה', h: 'לוחצים "+ הוצאה". חלוקה שווה כבר מסומנת - רק שומרים.', done: function () { return S.viewerAdded; }, go: 'tab' },
     { t: 'מי חייב למי', h: 'עוברים ל"מי חייב למי" - כמה העברות במקום עשרות.', done: function () { return S.balancesViewed; }, go: 'balances' },
-    { t: 'אריאל בלי האפליקציה', h: 'לוחצים "איך אריאל רואה את זה?" - צפייה בדפדפן, ותשלום במזומן שנעה מסמנת.', done: function () { return S.danaMarked; }, go: 'web' },
-    { t: 'דילוג ליום ראשון', h: 'בפס ההדגמה: "דילוג ליום ראשון". חוזרים לדף הבית.', done: function () { return S.time === 'sun'; }, go: 'home' },
+    { t: 'אריאל בלי האפליקציה', h: 'לוחצים "איך אריאל רואה את זה?" - צפייה בדפדפן, ותשלום במזומן שנעה מסמנת.', done: function () { return S.creditorMarked; }, go: 'web' },
+    { t: 'דילוג ליום ראשון', h: 'במדריך, תחת "זמן בהדגמה": "דילוג ליום ראשון". חוזרים לדף הבית.', done: function () { return S.time === 'sun'; }, go: 'home' },
     { t: 'סגירת החוב', h: 'בכרטיס בדף הבית: "לסגור עכשיו" ואז אישור "לשלם ב-PayBox".', done: function () { return S.closed; }, go: 'home' }
   ];
   function curStep() { for (var i = 0; i < STEPS.length; i++) if (!STEPS[i].done()) return i; return STEPS.length; }
   function hint(stepIdx) { return curStep() === stepIdx ? ' pulse' : ''; }
 
   /* ---------- routing ---------- */
-  var ROUTES = ['start', 'home', 'create', 'invite', 'tab', 'add', 'web', 'dana', 'done'];
+  var ROUTES = ['start', 'home', 'create', 'invite', 'tab', 'add', 'web', 'creditor', 'done'];
   function go(r) { if (location.hash !== '#/' + r) location.hash = '#/' + r; else render(); }
   function routeFromHash() {
     var r = (location.hash || '').replace('#/', '');
     if (r === 'balances') { S.tabView = 'balances'; r = 'tab'; }
+    if (r === 'dana') r = 'creditor'; // old link
     if (ROUTES.indexOf(r) < 0) r = S.route || 'start';
     if (r !== 'start' && r !== 'home' && !S.created && r !== 'create') r = 'home';
-    if ((r === 'add' || r === 'web' || r === 'dana') && S.time === 'fri') r = 'tab';
+    if ((r === 'add' || r === 'web' || r === 'creditor') && S.time === 'fri') r = 'tab';
     if (r === 'add' && S.closed) r = 'tab';
     if (r === 'done' && !S.closed) r = 'tab';
     return r;
@@ -178,7 +179,7 @@
       '<h1 tabindex="-1"><span class="start-wm" lang="en">PayBox</span> <span lang="en">Split</span></h1>' +
       '<p class="start-tag">חשבון משותף לטיול עם חברים</p>' +
       '<p class="start-lead">כל אחד משלם על משהו, <bdi class="en">PayBox Split</bdi> אומר מי חייב למי - וסוגרים את החוב מאותו מסך.</p>' +
-      '<div class="start-story"><strong>בהדגמה אתם יובל.</strong> יובל ו-5 חברים יוצאים לסופ״ש בגליל. 8 שלבים, בערך דקה וחצי.</div>' +
+      '<div class="start-story"><strong>בהדגמה אתם יובל.</strong> יובל ו-5 חברים יוצאים לסופ״ש בגליל. 8 שלבים ואז מבט מנהל מוצר, בערך דקה וחצי.</div>' +
       '<button class="btn primary big pulse" data-a="begin">בואו נתחיל</button>' +
       '<button class="btn link" data-a="pm">מבט מנהל מוצר</button>' +
       '</section>';
@@ -203,7 +204,7 @@
         '<p class="eyebrow">חדש: PayBox Split</p>' +
         '<h2>יוצאים לטיול?</h2>' +
         '<p>פותחים חשבון משותף, כל אחד רושם מה שילם, ואנחנו עושים את החשבון.</p>' +
-        '<button class="btn yellow' + hint(0) + '" data-a="nav" data-to="create">פותחים חשבון' + icon('chev') + '</button></div>' +
+        '<button class="btn yellow" data-a="nav" data-to="create">פותחים חשבון' + icon('chev') + '</button></div>' +
         '<svg class="promo-art" viewBox="0 0 110 130" aria-hidden="true">' +
         '<rect x="22" y="14" width="62" height="86" rx="8" fill="#fff"/><path d="M22 92 l8 8 8-8 8 8 8-8 8 8 8-8 8 8 6-6 V100 H22z" fill="#fff"/>' +
         '<rect x="32" y="28" width="30" height="6" rx="3" fill="#BFD9F5"/><rect x="32" y="42" width="42" height="6" rx="3" fill="#BFD9F5"/><rect x="32" y="56" width="22" height="6" rx="3" fill="#BFD9F5"/>' +
@@ -236,7 +237,7 @@
     }
     var pinned = S.created && !S.closed; // Zeigarnik: an open tab stays pinned right under the balance
     function tile(label, ic, attrs, badge) {
-      return '<li><button class="tile' + (badge ? ' tile-new' : '') + '" ' + attrs + '><span class="tile-ic">' + icon(ic) + (badge ? '<span class="tbadge">' + badge + '</span>' : '') + '</span><span class="tile-l">' + label + '</span></button></li>';
+      return '<li><button class="tile' + (badge ? ' tile-new' + hint(0) : '') + '" ' + attrs + '><span class="tile-ic">' + icon(ic) + (badge ? '<span class="tbadge">' + badge + '</span>' : '') + '</span><span class="tile-l">' + label + '</span></button></li>';
     }
     return '<section class="home">' +
       '<div class="balrow"><div class="balcard"><div class="bal-top"><h1 tabindex="-1">היתרה שלי</h1>' +
@@ -395,18 +396,18 @@
       (mine.length ?
         '<button class="btn primary big" data-a="signup">לשלם ב-PayBox</button><p class="muted small center">הרשמה קצרה רק ברגע התשלום</p>' +
         '<div class="note">משלמים במזומן? נותנים ל' + esc(name(mine[0].to)) + ' את הכסף ביד, ומי שמקבל את הכסף מסמן בחשבון שהחוב נסגר.</div>' +
-        '<button class="btn coral wide' + hint(5) + '" data-a="nav" data-to="dana">אריאל שילם במזומן - לראות את הצד של ' + esc(name(mine[0].to)) + '</button>' : '') +
+        '<button class="btn coral wide' + hint(5) + '" data-a="nav" data-to="creditor">אריאל שילם במזומן - לראות את הצד של ' + esc(name(mine[0].to)) + '</button>' : '') +
       '<button class="btn ghost wide" data-a="nav" data-to="balances">חזרה לאפליקציה של יובל</button></section>';
   }
 
-  function vDana() {
+  function vCreditor() {
     var t = transfers().filter(function (x) { return x.from === 'roni'; })[0];
     var body;
     if (!t) body = '<p class="ok">' + icon('check') + ' אין לאריאל חוב פתוח.</p><button class="btn primary big" data-a="nav" data-to="balances">חזרה ליובל</button>';
     else {
       var cred = name(t.to);
       body = '<p class="viewing">עכשיו אנחנו בטלפון של ' + esc(cred) + '. אריאל נתן לה ' + money(t.amount) + ' במזומן.</p>' +
-        '<div class="card"><div class="dana-row">' + avatar('roni') + '<span><strong>אריאל</strong><span class="muted small"> חייב לך</span></span>' + money(t.amount) + '</div>' +
+        '<div class="card"><div class="cred-row">' + avatar('roni') + '<span><strong>אריאל</strong><span class="muted small"> חייב לך</span></span>' + money(t.amount) + '</div>' +
         '<p>קיבלת את הכסף מחוץ ל-PayBox?</p>' +
         '<button class="btn primary big' + hint(5) + '" data-a="dmark" data-rail="cash">קיבלתי במזומן - סמן כסגור</button></div>' +
         '<p class="muted small">רק מי שמגיע לו הכסף יכול לסמן חוב כסגור - לא החייב.</p>';
@@ -515,7 +516,7 @@
     if (location.hash !== '#/' + r && !(r === 'tab' && location.hash === '#/balances')) { history.replaceState(null, '', '#/' + r); }
     S.route = r;
     if (r === 'tab' && S.tabView === 'balances' && !S.balancesViewed && S.expenses.length) { S.balancesViewed = true; track('balance_viewed'); }
-    var html = { start: vStart, home: vHome, create: vCreate, invite: vInvite, tab: vTab, add: vAdd, web: vWeb, dana: vDana, done: vDone }[r]();
+    var html = { start: vStart, home: vHome, create: vCreate, invite: vInvite, tab: vTab, add: vAdd, web: vWeb, creditor: vCreditor, done: vDone }[r]();
     var scr = document.getElementById('screen');
     scr.innerHTML = html;
     scr.className = 'screen r-' + r;
@@ -547,7 +548,7 @@
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) { el.innerHTML = money(to); return; }
     var t0 = null;
-    function step(ts) { if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 900); el.innerHTML = money(Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); else el.classList.add('flash'); }
+    function step(ts) { if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 900); el.innerHTML = money(k < 1 ? Math.round((from + (to - from) * (1 - Math.pow(1 - k, 3))) / 100) * 100 : to); if (k < 1) requestAnimationFrame(step); else el.classList.add('flash'); }
     setTimeout(function () { requestAnimationFrame(step); }, 250);
   }
   function confetti() {
@@ -560,7 +561,8 @@
 
   /* ---------- sheets & toast ---------- */
   var lastFocus = null, payTimer = null;
-  function setInert(on) { ['screen', 'appbar', 'bnav', 'demobar', 'guide', 'pm'].forEach(function (id) { var el = document.getElementById(id); if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }); }
+  function setInert(on) { document.body.classList.toggle('sheet-open', !!on); setInert2(on); }
+  function setInert2(on) { ['screen', 'appbar', 'bnav', 'demobar', 'guide', 'pm'].forEach(function (id) { var el = document.getElementById(id); if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }); }
   function sheet(html) {
     var w = document.getElementById('sheetWrap');
     if (w.hidden) lastFocus = document.activeElement;
@@ -575,7 +577,7 @@
     if (was && lastFocus && document.contains(lastFocus)) lastFocus.focus();
   }
   var toastT;
-  function toast(msg) { var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('show'); }, 2800); }
+  function toast(msg) { var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('show'); }, 2200); }
 
   function settleSheet(to) {
     var t = myDebts().filter(function (x) { return x.to === to; })[0]; if (!t) return;
@@ -623,7 +625,7 @@
     invite: function () { if (!S.invited) { S.invited = true; track('invite_sent', { channel: 'whatsapp' }); } toast('נשלח לקבוצה (דמה)'); render(); },
     copy: function () { toast('הקישור הועתק (דמה)'); },
     skip: function () {
-      if (S.time === 'fri') { if (!S.invited) { S.invited = true; track('invite_sent', { channel: 'whatsapp' }); } dayToSat(); track('time_skip', { to: 'sat' }); S.tabView = 'expenses'; toast('מוצ״ש: החברים רשמו 6 הוצאות'); go('tab'); }
+      if (S.time === 'fri') { if (!S.invited) { S.invited = true; track('invite_sent', { channel: 'whatsapp' }); } dayToSat(); track('time_skip', { to: 'sat' }); S.tabView = 'expenses'; toast('מוצ״ש: החברים הוסיפו ' + S.expenses.filter(function (e) { return e.loggedBy !== VIEWER; }).length + ' הוצאות - יש ' + S.expenses.length + ' בחשבון'); go('tab'); }
       else if (S.time === 'sat') { if (!S.viewerAdded) { toast('קודם מוסיפים את ההוצאה האחרונה'); go('tab'); return; } dayToSun(); track('time_skip', { to: 'sun' }); checkClosed(); toast('יום ראשון: החברים סגרו את החובות שלהם'); go(S.closed ? 'done' : 'home'); }
     },
     view: function (el) { S.tabView = el.dataset.v; history.replaceState(null, '', el.dataset.v === 'balances' ? '#/balances' : '#/tab'); render(); },
@@ -688,7 +690,7 @@
     dmark: function (el) {
       var t = transfers().filter(function (x) { return x.from === 'roni'; })[0]; if (!t) return;
       S.payments.push({ from: 'roni', to: t.to, amount: t.amount, rail: el.dataset.rail });
-      S.danaMarked = true; track('marked_settled', { from: 'roni', to: t.to, rail: el.dataset.rail });
+      S.creditorMarked = true; track('marked_settled', { from: 'roni', to: t.to, rail: el.dataset.rail });
       toast('החוב של אריאל סומן כסגור'); S.tabView = 'balances';
       if (checkClosed()) go('done'); else go('balances');
     },
