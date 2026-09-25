@@ -19,12 +19,12 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 
 
 ## Grader walkthrough (about 90 seconds)
-בואו נתחיל -> פותחים חשבון -> יוצרים ומזמינים -> שולחים בוואטסאפ -> דילוג למוצ״ש -> + הוצאה -> שומרים (530 -> 380) -> מי חייב למי (5 instead of 38) -> איך רוני רואה את זה? -> לראות את הצד של דנה -> קיבלתי בביט -> דילוג ליום ראשון -> לסגור עכשיו -> לשלם ב-PayBox -> סגרנו! -> מה זה אומר למנהל המוצר?
+בואו נתחיל -> פותחים חשבון -> יוצרים ומזמינים -> שולחים בוואטסאפ -> דילוג למוצ״ש -> + הוצאה -> שומרים (530 -> 380) -> מי חייב למי (5 instead of 38) -> איך אריאל רואה את זה? -> לראות את הצד של נעה -> קיבלתי בביט -> דילוג ליום ראשון -> לסגור עכשיו -> לשלם ב-PayBox -> סגרנו! -> מה זה אומר למנהל המוצר?
 
 ## MVP features -> screens
 | Feature | Where |
 |---|---|
-| F1 open tab + invite link; invitee views without signup, signup only at settle | `#/create`, `#/invite`, `#/web` (רוני) |
+| F1 open tab + invite link; invitee views without signup, signup only at settle | `#/create`, `#/invite`, `#/web` (אריאל) |
 | F2 add expense, equal split preselected, untick who wasn't there | `#/add` |
 | F3 who owes whom, fewest transfers | `#/balances` |
 | F4 one-tap settle in PayBox, or creditor marks settled (Bit/cash) | settle sheet, `#/dana`, "סמן כסגור" rows |

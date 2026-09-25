@@ -122,7 +122,7 @@
     { t: 'דילוג למוצ״ש', h: 'בפס ההדגמה למעלה: "דילוג למוצ״ש". החברים כבר רשמו הוצאות.', done: function () { return S.time !== 'fri'; }, go: 'tab' },
     { t: 'הוספת הוצאה', h: 'לוחצים "+ הוצאה". חלוקה שווה כבר מסומנת - רק שומרים.', done: function () { return S.viewerAdded; }, go: 'tab' },
     { t: 'מי חייב למי', h: 'עוברים ל"מי חייב למי" - כמה העברות במקום עשרות.', done: function () { return S.balancesViewed; }, go: 'balances' },
-    { t: 'רוני בלי האפליקציה', h: 'לוחצים "איך רוני רואה את זה?" - צפייה בדפדפן, ותשלום בביט שדנה מסמנת.', done: function () { return S.danaMarked; }, go: 'web' },
+    { t: 'אריאל בלי האפליקציה', h: 'לוחצים "איך אריאל רואה את זה?" - צפייה בדפדפן, ותשלום בביט שנעה מסמנת.', done: function () { return S.danaMarked; }, go: 'web' },
     { t: 'דילוג ליום ראשון', h: 'בפס ההדגמה: "דילוג ליום ראשון". חוזרים לדף הבית.', done: function () { return S.time === 'sun'; }, go: 'home' },
     { t: 'סגירת החוב', h: 'בכרטיס בדף הבית: "לסגור עכשיו" ואז אישור "לשלם ב-PayBox".', done: function () { return S.closed; }, go: 'home' }
   ];
@@ -304,7 +304,7 @@
     })).join('');
     return head + '<ul class="trs">' + rows + '</ul>' +
       '<p class="muted small">חוב נסגר כשמשלמים ב-PayBox, או כשמי שמגיע לו הכסף מסמן שקיבל בביט או במזומן.</p>' +
-      (S.time !== 'fri' ? '<button class="btn ghost wide' + hint(5) + '" data-a="nav" data-to="web">איך רוני רואה את זה? (בלי האפליקציה)</button>' : '');
+      (S.time !== 'fri' ? '<button class="btn ghost wide' + hint(5) + '" data-a="nav" data-to="web">איך אריאל רואה את זה? (בלי האפליקציה)</button>' : '');
   }
 
   var addOpenedAt = 0;
@@ -344,32 +344,32 @@
       : paid.length ? '<p>' + icon('check') + ' החוב שלך סגור</p><p class="muted small">' + esc(name(paid[0].to)) + ' סימנה שקיבלה ' + (paid[0].rail === 'bit' ? 'בביט' : 'במזומן') + '</p>' : '<p>אצלך הכל מאוזן</p>';
     return '<div class="browser"><div class="urlbar">' + icon('lock') + '<span dir="ltr">' + D.tab.link + '</span></div></div>' +
       '<section class="pad web">' +
-      '<p class="viewing">כך רוני, שמשתמש רק בביט, רואה את החשבון מהקישור בוואטסאפ - בלי אפליקציה ובלי הרשמה.</p>' +
+      '<p class="viewing">כך אריאל, שמשתמש רק בביט, רואה את החשבון מהקישור בוואטסאפ - בלי אפליקציה ובלי הרשמה.</p>' +
       '<div class="webbrand"><img src="assets/logo.svg" alt="" width="28" height="28"> PayBox Split</div>' +
-      '<h1 tabindex="-1">היי רוני</h1><p class="muted">הוזמנת לחשבון "' + esc(D.tab.name) + '" · ' + IDS.length + ' חברים</p>' +
+      '<h1 tabindex="-1">היי אריאל</h1><p class="muted">הוזמנת לחשבון "' + esc(D.tab.name) + '" · ' + IDS.length + ' חברים</p>' +
       '<div class="mycard ' + (mine.length ? 'owe' : 'even') + '">' + bal + '</div>' +
       '<h3 class="sec">מה רשמת</h3><ul class="exp">' + logged.map(function (e) { return '<li class="exp-row static">' + avatar('roni') + '<span class="exp-txt"><strong>' + esc(e.title) + '</strong><span class="muted small">נרשם מהדפדפן</span></span>' + money(e.amount * 100) + '</li>'; }).join('') + '</ul>' +
       (mine.length ?
         '<button class="btn primary big" data-a="signup">לשלם ב-PayBox</button><p class="muted small center">הרשמה קצרה רק ברגע התשלום</p>' +
         '<div class="note">משלמים בביט או במזומן? מעבירים ל' + esc(name(mine[0].to)) + ' כרגיל, ומי שמקבל את הכסף מסמן בחשבון שהחוב נסגר.</div>' +
-        '<button class="btn coral wide' + hint(5) + '" data-a="nav" data-to="dana">רוני העביר בביט - לראות את הצד של ' + esc(name(mine[0].to)) + '</button>' : '') +
+        '<button class="btn coral wide' + hint(5) + '" data-a="nav" data-to="dana">אריאל העביר בביט - לראות את הצד של ' + esc(name(mine[0].to)) + '</button>' : '') +
       '<button class="btn ghost wide" data-a="nav" data-to="balances">חזרה לאפליקציה של יובל</button></section>';
   }
 
   function vDana() {
     var t = transfers().filter(function (x) { return x.from === 'roni'; })[0];
     var body;
-    if (!t) body = '<p class="ok">' + icon('check') + ' אין לרוני חוב פתוח.</p><button class="btn primary big" data-a="nav" data-to="balances">חזרה ליובל</button>';
+    if (!t) body = '<p class="ok">' + icon('check') + ' אין לאריאל חוב פתוח.</p><button class="btn primary big" data-a="nav" data-to="balances">חזרה ליובל</button>';
     else {
       var cred = name(t.to);
-      body = '<p class="viewing">עכשיו אנחנו בטלפון של ' + esc(cred) + '. רוני העביר לה ' + money(t.amount) + ' בביט.</p>' +
-        '<div class="card"><div class="dana-row">' + avatar('roni') + '<span><strong>רוני</strong><span class="muted small"> חייב לך</span></span>' + money(t.amount) + '</div>' +
+      body = '<p class="viewing">עכשיו אנחנו בטלפון של ' + esc(cred) + '. אריאל העביר לה ' + money(t.amount) + ' בביט.</p>' +
+        '<div class="card"><div class="dana-row">' + avatar('roni') + '<span><strong>אריאל</strong><span class="muted small"> חייב לך</span></span>' + money(t.amount) + '</div>' +
         '<p>קיבלת את הכסף מחוץ ל-PayBox?</p>' +
         '<button class="btn primary big' + hint(5) + '" data-a="dmark" data-rail="bit">קיבלתי בביט - סמן כסגור</button>' +
         '<button class="btn ghost wide" data-a="dmark" data-rail="cash">קיבלתי במזומן</button></div>' +
         '<p class="muted small">רק מי שמגיע לו הכסף יכול לסמן חוב כסגור - לא החייב.</p>';
     }
-    return header('הטלפון של ' + (t ? esc(name(t.to)) : 'דנה'), 'web') + '<section class="pad">' + body + '</section>';
+    return header('הטלפון של ' + (t ? esc(name(t.to)) : 'נעה'), 'web') + '<section class="pad">' + body + '</section>';
   }
 
   function vDone() {
@@ -631,14 +631,14 @@
     },
     signup: function () {
       track('signup_prompt');
-      sheet('<h2 id="sheetTitle">תשלום ב-PayBox</h2><p>כדי לשלם ב-PayBox צריך הרשמה קצרה - רק עכשיו, ברגע התשלום. עד עכשיו רוני צפה ורשם הוצאה בלי חשבון.</p>' +
+      sheet('<h2 id="sheetTitle">תשלום ב-PayBox</h2><p>כדי לשלם ב-PayBox צריך הרשמה קצרה - רק עכשיו, ברגע התשלום. עד עכשיו אריאל צפה ורשם הוצאה בלי חשבון.</p>' +
         '<p class="fake">בהדגמה אין הרשמה ואין שדות אמיתיים</p><button class="btn primary wide" data-a="closesheet">הבנתי</button>'); save();
     },
     dmark: function (el) {
       var t = transfers().filter(function (x) { return x.from === 'roni'; })[0]; if (!t) return;
       S.payments.push({ from: 'roni', to: t.to, amount: t.amount, rail: el.dataset.rail });
       S.danaMarked = true; track('marked_settled', { from: 'roni', to: t.to, rail: el.dataset.rail });
-      toast('החוב של רוני סומן כסגור'); S.tabView = 'balances';
+      toast('החוב של אריאל סומן כסגור'); S.tabView = 'balances';
       if (checkClosed()) go('done'); else go('balances');
     },
     nexttab: function () { if (!S.nextTabIntent) { S.nextTabIntent = true; track('next_tab_cta'); } toast('בגרסה המלאה נפתח כאן חשבון חדש. נספר במבט מנהל מוצר כסימן להרגל'); render(); },

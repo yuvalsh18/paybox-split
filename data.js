@@ -13,11 +13,11 @@ window.SPLIT_DATA = {
   // order matters: used as the deterministic tie-break in the netting algorithm
   members: [
     { id: 'yuval', name: 'יובל', wallet: 'paybox', color: '#1F5E4B', viewer: true },
-    { id: 'dana',  name: 'דנה',  wallet: 'paybox', color: '#B4472C' },
-    { id: 'itai',  name: 'איתי', wallet: 'paybox', color: '#3E5C8A' },
+    { id: 'dana',  name: 'נעה',  wallet: 'paybox', color: '#B4472C' },
+    { id: 'itai',  name: "ג'קי", wallet: 'paybox', color: '#3E5C8A' },
     { id: 'gal',   name: 'גל',   wallet: 'paybox', color: '#7A4E9E' },
-    { id: 'maya',  name: 'מאיה', wallet: 'paybox', color: '#8A6A12' },
-    { id: 'roni',  name: 'רוני', wallet: 'bit',    color: '#2F7D7A' }
+    { id: 'maya',  name: 'סאלי', wallet: 'paybox', color: '#8A6A12' },
+    { id: 'roni',  name: 'אריאל', wallet: 'bit',    color: '#2F7D7A' }
   ],
   // expenses 1-7 exist when the story jumps to Saturday night; #8 is added live by the viewer
   seedExpenses: [
