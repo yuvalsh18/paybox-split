@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PayBox Split - סמל קונספט">
+  <rect width="64" height="64" rx="16" fill="#1F5E4B"/>
+  <!-- a receipt with a zig-zag edge, cut diagonally into two halves -->
+  <path d="M17 12 H35 L25 52 L21 49 L17 52 Z" fill="#FAF7F2"/>
+  <path d="M39 12 H47 V52 L43 49 L39 52 L35 49 L31 52 L29 51 Z" fill="#FF7A59"/>
+  <rect x="20" y="20" width="9" height="3" rx="1.5" fill="#1F5E4B"/>
+  <rect x="20" y="27" width="7" height="3" rx="1.5" fill="#1F5E4B"/>
+  <rect x="38" y="20" width="6" height="3" rx="1.5" fill="#1C2421" opacity=".55"/>
+</svg>
