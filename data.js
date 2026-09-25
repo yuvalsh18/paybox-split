@@ -12,7 +12,7 @@ window.SPLIT_DATA = {
   viewerId: 'yuval',
   // order matters: used as the deterministic tie-break in the netting algorithm
   members: [
-    { id: 'yuval', name: 'יובל', wallet: 'paybox', color: '#1F5E4B', viewer: true },
+    { id: 'yuval', name: 'יובל', wallet: 'paybox', color: '#0A74B8', viewer: true },
     { id: 'dana',  name: 'נעה',  wallet: 'paybox', color: '#B4472C' },
     { id: 'itai',  name: "ג'קי", wallet: 'paybox', color: '#3E5C8A' },
     { id: 'gal',   name: 'גל',   wallet: 'paybox', color: '#7A4E9E' },

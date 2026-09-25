@@ -51,7 +51,13 @@
       share: '<path d="M12 4v11M7 9l5-5 5 5M5 14v5h14v-5"/>',
       chart: '<path d="M5 19V9M12 19V5M19 19v-7"/>',
       reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/>',
-      close: '<path d="M6 6l12 12M18 6L6 18"/>'
+      close: '<path d="M6 6l12 12M18 6L6 18"/>',
+      chev: '<path d="M15 5l-7 7 7 7" />',
+      transfer: '<path d="M4 8h14l-4-4M20 16H6l4 4" />',
+      request: '<path d="M12 3v12M7 10l5 5 5-5" /><path d="M4 17v3h16v-3" />',
+      groups: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3.2 3.2 0 010 6.2M21 20c0-2.7-1.7-5-4-5.8"/>',
+      receipt: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+      swap: '<path d="M7 7h12l-3-3M17 17H5l3 3"/><circle cx="5" cy="7" r="1.2"/><circle cx="19" cy="17" r="1.2"/>'
     }[n];
     return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
   }
@@ -144,16 +150,25 @@
   }
 
   /* ---------- screens ---------- */
-  function header(title, back, extra) {
+  // text wordmark only - no PayBox logo/mascot bitmap
+  function brand(sub) { return '<div class="brand"><span class="wm" lang="en">PayBox</span>' + (sub ? '<span class="wm-sub" lang="en">' + sub + '</span>' : '') + '</div>'; }
+  function appbar(back, extra, sub) {
     return '<header class="appbar">' +
       (back ? '<button class="iconbtn" data-a="nav" data-to="' + back + '" aria-label="חזרה">' + icon('back') + '</button>' : '<span class="iconbtn-sp"></span>') +
-      '<h1 tabindex="-1">' + title + '</h1>' + (extra || '<span class="iconbtn-sp"></span>') + '</header>';
+      brand(sub) + (extra || '<span class="iconbtn-sp"></span>') + '</header>';
   }
+  // the blue app bar is moved into the fixed #appbar slot by render(); the page title stays in the screen
+  function header(title, back, extra) {
+    return appbar(back, extra, 'Split') + '<h1 class="page-title" tabindex="-1">' + title + '</h1>';
+  }
+  function secHead(title, count, link) {
+    return '<div class="sechead"><h2 class="sec">' + title + (count != null ? ' <span class="badge">' + count + '</span>' : '') + '</h2>' + (link || '') + '</div>';
+  }
+  function slink(label, attrs) { return '<button class="slink" ' + attrs + '>' + label + icon('chev') + '</button>'; }
 
   function vStart() {
     return '<section class="start">' +
-      '<img class="start-logo" src="assets/logo.svg" alt="" width="84" height="84">' +
-      '<h1 tabindex="-1">PayBox Split</h1>' +
+      '<h1 tabindex="-1"><span class="start-wm" lang="en">PayBox</span> <span lang="en">Split</span></h1>' +
       '<p class="start-tag">חשבון משותף לטיול עם חברים</p>' +
       '<p class="start-lead">כל אחד משלם על משהו, <bdi class="en">PayBox Split</bdi> אומר מי חייב למי - וסוגרים את החוב מאותו מסך.</p>' +
       '<div class="start-story"><strong>בהדגמה אתם יובל.</strong> יובל ו-5 חברים יוצאים לסופ״ש בגליל. 8 שלבים, בערך דקה וחצי.</div>' +
@@ -201,15 +216,20 @@
         '<p><strong>' + esc(D.tab.name) + '</strong> - כולם מאוזנים. החשבון עבר לארכיון, הסיכום נשמר כאן.</p>' +
         '<button class="btn ghost" data-a="nav" data-to="done">לסיכום הטיול</button></article>';
     }
+    var head = !S.created ? '' : !S.closed ? secHead('חשבונות פתוחים', 1, slink('לחשבון', 'data-a="nav" data-to="tab"')) : secHead('חשבונות שנסגרו', 1);
+    function act(title, amt, date, dot) {
+      return '<li><span class="act-main"><span>' + title + '</span>' + money(amt) + '</span><span class="act-date">' + date + '<i class="' + dot + '" aria-hidden="true"></i></span></li>';
+    }
     return '<section class="home">' +
-      '<div class="home-top"><p class="muted">שלום יובל</p><h1 tabindex="-1">יתרה ' + money(walletBalance(), 'lg') + ' <span class="dummy">דמה</span></h1>' +
-      '<div class="quick">' +
-      ['העברה', 'בקשה', 'קבוצות'].map(function (q) { return '<button class="q" data-a="notdemo">' + q + '</button>'; }).join('') +
-      '<button class="q q-split" data-a="nav" data-to="' + (S.created ? 'tab' : 'create') + '">Split</button></div></div>' +
-      card +
-      '<h3 class="sec">פעולות אחרונות</h3><ul class="activity">' +
-      S.payments.filter(function (p) { return p.from === VIEWER && p.rail === 'paybox'; }).map(function (p) { return '<li><span>' + icon('check') + ' תשלום ל' + esc(name(p.to)) + ' - ' + esc(D.tab.name) + '</span>' + money(p.amount) + '</li>'; }).join('') +
-      '<li><span>העברה מאמא (דמה)</span>' + money(20000) + '</li><li><span>קפה במשרד - קבוצת עבודה (דמה)</span>' + money(1800) + '</li></ul>' +
+      '<div class="home-top"><p class="muted">שלום יובל</p><h1 tabindex="-1">יתרה ' + money(walletBalance(), 'lg') + ' <span class="dummy">דמה</span></h1></div>' +
+      '<nav class="cats quick" aria-label="פעולות מהירות">' +
+      [['העברה', 'transfer'], ['בקשה', 'request'], ['קבוצות', 'groups']].map(function (q) { return '<button class="cat q" data-a="notdemo">' + icon(q[1]) + q[0] + '</button>'; }).join('') +
+      '<button class="cat q q-split on" data-a="nav" data-to="' + (S.created ? 'tab' : 'create') + '">' + icon('receipt') + '<span lang="en">Split</span></button></nav>' +
+      head + card +
+      '<div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>' +
+      secHead('פעולות אחרונות', null, slink('כל הפעולות', 'data-a="notdemo"')) + '<ul class="activity">' +
+      S.payments.filter(function (p) { return p.from === VIEWER && p.rail === 'paybox'; }).map(function (p) { return act(icon('check') + ' תשלום ל' + esc(name(p.to)) + ' - ' + esc(D.tab.name), p.amount, '18.10.26', ''); }).join('') +
+      act('העברה מאמא (דמה)', 20000, '12.10.26', 'in') + act('קפה במשרד - קבוצת עבודה (דמה)', 1800, '08.10.26', '') + '</ul>' +
       '</section>';
   }
 
@@ -272,9 +292,9 @@
       '<span class="muted small">' + IDS.length + ' חברים · <span dir="ltr">' + D.tab.start + '-' + D.tab.end + '</span></span>' +
       '<span class="muted small">סה״כ ' + money(total()) + '</span></section>' +
       '<section class="pad tight">' + myCard() + socialStrip() +
-      '<div class="seg" role="group" aria-label="תצוגת החשבון">' +
-      '<button aria-pressed="' + (S.tabView !== 'balances') + '" data-a="view" data-v="expenses">הוצאות</button>' +
-      '<button class="' + (S.tabView !== 'balances' && S.viewerAdded ? hint(4).trim() : '') + '" aria-pressed="' + (S.tabView === 'balances') + '" data-a="view" data-v="balances">מי חייב למי</button></div>' +
+      '<div class="seg cats" role="group" aria-label="תצוגת החשבון">' +
+      '<button class="cat" aria-pressed="' + (S.tabView !== 'balances') + '" data-a="view" data-v="expenses">' + icon('receipt') + 'הוצאות</button>' +
+      '<button class="cat' + (S.tabView !== 'balances' && S.viewerAdded ? hint(4) : '') + '" aria-pressed="' + (S.tabView === 'balances') + '" data-a="view" data-v="balances">' + icon('swap') + 'מי חייב למי</button></div>' +
       view + '</section>' +
       (S.tabView === 'expenses' && !S.closed && S.time !== 'fri' ? '<button class="fab' + hint(3) + '" data-a="nav" data-to="add">' + icon('plus') + ' הוצאה</button>' : '');
   }
@@ -282,7 +302,7 @@
   function expensesView() {
     if (!S.expenses.length) return '<div class="empty"><p><strong>עדיין אין הוצאות.</strong></p><p class="muted">מי ששילם על משהו רושם כאן, וכולם רואים את אותו חשבון.</p>' +
       (S.invited ? '<button class="btn primary' + hint(2) + '" data-a="skip">דילוג למוצ״ש</button>' : '<button class="btn primary" data-a="nav" data-to="invite">הזמנת חברים</button>') + '</div>';
-    return '<ul class="exp">' + S.expenses.slice().reverse().map(function (e) {
+    return secHead('כל ההוצאות', S.expenses.length) + '<ul class="exp">' + S.expenses.slice().reverse().map(function (e) {
       var n = participants(e).length;
       return '<li><button class="exp-row" data-a="expense" data-id="' + e.id + '">' + avatar(e.payer) +
         '<span class="exp-txt"><strong>' + esc(e.title) + '</strong><span class="muted small">שולם ע״י ' + esc(name(e.payer)) + ' · ' + (n === IDS.length ? 'כולם' : n + ' אנשים') + (e.viaWeb ? ' · נרשם מהדפדפן' : '') + '</span></span>' +
@@ -345,10 +365,10 @@
     return '<div class="browser"><div class="urlbar">' + icon('lock') + '<span dir="ltr">' + D.tab.link + '</span></div></div>' +
       '<section class="pad web">' +
       '<p class="viewing">כך אריאל, שאין לו את PayBox, רואה את החשבון מהקישור בוואטסאפ - בלי אפליקציה ובלי הרשמה.</p>' +
-      '<div class="webbrand"><img src="assets/logo.svg" alt="" width="28" height="28"> PayBox Split</div>' +
+      '<div class="webbrand"><span class="g-wm" lang="en">PayBox <span>Split</span></span></div>' +
       '<h1 tabindex="-1">היי אריאל</h1><p class="muted">הוזמנת לחשבון "' + esc(D.tab.name) + '" · ' + IDS.length + ' חברים</p>' +
       '<div class="mycard ' + (mine.length ? 'owe' : 'even') + '">' + bal + '</div>' +
-      '<h3 class="sec">מה רשמת</h3><ul class="exp">' + logged.map(function (e) { return '<li class="exp-row static">' + avatar('roni') + '<span class="exp-txt"><strong>' + esc(e.title) + '</strong><span class="muted small">נרשם מהדפדפן</span></span>' + money(e.amount * 100) + '</li>'; }).join('') + '</ul>' +
+      '<h2 class="sec">מה רשמת</h2><ul class="exp">' + logged.map(function (e) { return '<li class="exp-row static">' + avatar('roni') + '<span class="exp-txt"><strong>' + esc(e.title) + '</strong><span class="muted small">נרשם מהדפדפן</span></span>' + money(e.amount * 100) + '</li>'; }).join('') + '</ul>' +
       (mine.length ?
         '<button class="btn primary big" data-a="signup">לשלם ב-PayBox</button><p class="muted small center">הרשמה קצרה רק ברגע התשלום</p>' +
         '<div class="note">משלמים במזומן? נותנים ל' + esc(name(mine[0].to)) + ' את הכסף ביד, ומי שמקבל את הכסף מסמן בחשבון שהחוב נסגר.</div>' +
@@ -375,7 +395,7 @@
     var biggest = S.expenses.slice().sort(function (a, b) { return b.amount - a.amount; })[0];
     var pb = S.payments.filter(function (p) { return p.rail === 'paybox'; }).length;
     return '<section class="done-s"><div class="confetti" id="confetti" aria-hidden="true"></div>' +
-      '<img src="assets/logo.svg" alt="" width="64" height="64"><h1 tabindex="-1">סגרנו!</h1>' +
+      '<span class="done-ic" aria-hidden="true">' + icon('check') + '</span><h1 tabindex="-1">סגרנו!</h1>' +
       '<p class="lead">' + esc(D.tab.name) + ' - כולם מאוזנים</p>' +
       '<div class="recap"><div><strong>' + D.tab.days + '</strong><span>ימים</span></div><div><strong>' + IDS.length + '</strong><span>חברים</span></div><div><strong>' + S.expenses.length + '</strong><span>הוצאות</span></div></div>' +
       '<ul class="recap-list"><li>יצא ביחד ' + money(total()) + '</li><li>הכי יקר: ' + esc(biggest.title) + ' (' + money(biggest.amount * 100) + ')</li>' +
@@ -443,7 +463,7 @@
   /* ---------- chrome: guide + demo bar ---------- */
   function vGuide() {
     var c = curStep();
-    return '<div class="guide-head"><img src="assets/logo.svg" alt="" width="36" height="36"><div><strong>PayBox Split</strong><span>מדריך הדגמה</span></div>' +
+    return '<div class="guide-head"><div><strong class="g-wm" lang="en">PayBox <span>Split</span></strong><span>מדריך הדגמה</span></div>' +
       '<button class="guide-toggle" data-a="guide" aria-expanded="' + S.guideOpen + '" aria-controls="guideBody">' + (c < STEPS.length ? 'שלב ' + (c + 1) + ' מתוך ' + STEPS.length : 'סיימתם') + '</button></div>' +
       '<div class="guide-body" id="guideBody"><p class="guide-lead">אב-טיפוס של חשבון משותף לטיול בתוך PayBox: פותחים, רושמים הוצאות, רואים מי חייב למי וסוגרים את החובות.</p>' +
       '<ol class="steps">' + STEPS.map(function (s, i) {
@@ -466,7 +486,7 @@
   var lastRoute = null, pmOpener = null;
   function focusKey(el) { if (!el || !el.dataset || !el.dataset.a) return null; return '[data-a="' + el.dataset.a + '"]' + (el.dataset.v ? '[data-v="' + el.dataset.v + '"]' : '') + (el.dataset.to ? '[data-to="' + el.dataset.to + '"]' : ''); }
   function render() {
-    var ae = document.activeElement, fk = focusKey(ae), fIn = ae && ae.closest ? ae.closest('#guide, #screen, #pm') : null;
+    var ae = document.activeElement, fk = focusKey(ae), fIn = ae && ae.closest ? ae.closest('#guide, #screen, #pm, #appbar') : null;
     var r = routeFromHash();
     if (location.hash !== '#/' + r && !(r === 'tab' && location.hash === '#/balances')) { history.replaceState(null, '', '#/' + r); }
     S.route = r;
@@ -475,6 +495,11 @@
     var scr = document.getElementById('screen');
     scr.innerHTML = html;
     scr.className = 'screen r-' + r;
+    document.getElementById('phone').setAttribute('data-route', r);
+    var slot = document.getElementById('appbar'), hb = scr.querySelector('.appbar');
+    if (hb) { slot.innerHTML = ''; slot.appendChild(hb); }
+    else slot.innerHTML = r === 'home' ? appbar(null, null, '') : r === 'done' ? appbar(null, null, 'Split') : '';
+    slot.hidden = !slot.firstChild;
     document.getElementById('demobar').innerHTML = vDemobar();
     document.getElementById('demobar').hidden = r === 'start';
     var g = document.getElementById('guide'); g.innerHTML = vGuide(); g.classList.toggle('open', !!S.guideOpen);
@@ -501,14 +526,14 @@
   function confetti() {
     var box = document.getElementById('confetti'); if (!box) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var cols = ['#FF7A59', '#1F5E4B', '#F2C14E', '#2E9E6A', '#FAF7F2'], out = '';
+    var cols = ['#1B9BDF', '#0A74B8', '#FFD34D', '#E23612', '#8ED6FE'], out = '';
     for (var i = 0; i < 36; i++) out += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;background:' + cols[i % 5] + ';animation-delay:' + (Math.random() * .6).toFixed(2) + 's;transform:rotate(' + (Math.random() * 360 | 0) + 'deg)"></i>';
     box.innerHTML = out;
   }
 
   /* ---------- sheets & toast ---------- */
   var lastFocus = null, payTimer = null;
-  function setInert(on) { ['screen', 'demobar', 'guide', 'pm'].forEach(function (id) { var el = document.getElementById(id); if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }); }
+  function setInert(on) { ['screen', 'appbar', 'demobar', 'guide', 'pm'].forEach(function (id) { var el = document.getElementById(id); if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }); }
   function sheet(html) {
     var w = document.getElementById('sheetWrap');
     if (w.hidden) lastFocus = document.activeElement;

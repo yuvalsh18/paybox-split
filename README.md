@@ -12,10 +12,10 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 | File | What |
 |---|---|
 | `index.html` | Shell: guide, phone, PM panel, disclaimers |
-| `styles.css` | Palette A "ערב בגליל" (pine `#1F5E4B`, coral `#FF7A59`, Rubik), logical CSS properties only |
+| `styles.css` | PayBox-style look (team decision 2026-09-25, from a PayBox app screenshot): sky header `#1B9BDF` (sampled `#20A9ED`, darkened so the large white header text passes 3:1), buttons/links/badges `#0A74B8` (5:1 with white), white cards with light grey border, thin-line blue category icons with an underlined active item, section headers with a blue link and count badge, dated history rows. Rubik. Logical CSS properties only. No PayBox logo, mascot or bitmap - the header is a plain text wordmark "PayBox / Split" |
 | `data.js` | Scenario - single source of truth (members, 7 seeded expenses, suggested 8th, KPI thresholds) |
 | `app.js` | Hash router, ledger maths (agorot integers, greedy fewest transfers), event log, PM metrics |
-| `assets/logo.svg` | Original mark: a receipt with a zig-zag edge cut into two halves |
+| `assets/logo.svg` | Generic favicon only (a receipt cut into two halves, in the blue palette); not shown inside the app |
 
 ## Grader walkthrough (about 90 seconds)
 בואו נתחיל -> פותחים חשבון -> יוצרים ומזמינים -> שולחים בוואטסאפ -> דילוג למוצ״ש -> + הוצאה -> שומרים (530 -> 380) -> מי חייב למי (5 instead of 38) -> איך אריאל רואה את זה? -> אריאל שילם במזומן - לראות את הצד של נעה -> קיבלתי במזומן - סמן כסגור -> דילוג ליום ראשון -> לסגור עכשיו -> לשלם ב-PayBox -> סגרנו! -> מה זה אומר למנהל המוצר?
