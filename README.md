@@ -5,14 +5,14 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 ## Run
 - Double-click `index.html`, or
 - `python -m http.server 8765` inside this folder and open http://localhost:8765
-- Desktop: phone frame (390x844) + a demo guide + the "מבט מנהל מוצר" panel. Phone: full screen, the guide collapses into a "שלב X מתוך 8" pill.
+- Desktop: phone frame (390x844) + a demo guide + the "מבט מנהל מוצר" panel. The demo clock and the time-skip buttons ("זמן בהדגמה") live in the guide, outside the phone, so the phone looks like the real app. Phone: full screen, the guide collapses into a "שלב X מתוך 8" pill.
 - "איפוס הדגמה" (in the guide and at the bottom of the PM panel) clears the saved state (`localStorage`, key `pbsplit-demo-v1`).
 
 ## Files
 | File | What |
 |---|---|
 | `index.html` | Shell: guide, phone, PM panel, disclaimers |
-| `styles.css` | PayBox look, aligned to the real PayBox home screen (team decision 2026-09-25, `assets/reference/paybox-home-2026.png`): white header with a navy text wordmark "PayBox" (hamburger on home, back chevron + "Split" on inner screens), blue gradient balance card `#3A8DDA`->`#2B79C8` (sampled `#4CA0E7`, darkened so white large text is 3.5:1), light-blue tiles `#EAF5FD` with line icons `#2F84D6` and a red "חדש" badge `#D42A45` (sampled `#E0364F`, darkened for 5:1) on the PayBox Split tile, a "כדאי לדעת" promo with its own SVG illustration and a yellow `#F7C92F` pill CTA, a floating 5-item bottom bar on home, navy text `#1F2A44`, buttons/links `#0A74B8` (5:1). Rubik. Logical CSS properties only. No PayBox logo, mascot, photo or bitmap |
+| `styles.css` | PayBox look, matched to the real home screen (`assets/reference/paybox-home-2026b.png`, fidelity pass 2026-09-25): Heebo in light/regular weights (bold only on buttons and bottom-bar labels), white header with a medium-weight slate "PayBox" text wordmark `#2B3340`, iOS-style status bar, flat balance card `#3F95E0` (sampled `#4A9DE6`, darkened so large white text is 3.2:1; the small "הצטרפות לריבית" chip sits on a darker tint for 4.5:1) with a light 60px balance, a small ₪ and the next card peeking in, light-blue tiles `#EAF5FD` (Split tile `#D6EBFB` + red "חדש" badge `#D42A45`), a "כדאי לדעת" promo with its own SVG and a yellow `#F7C92F` CTA, a translucent floating 5-item bottom bar, bottom snackbar toasts, buttons/links `#0A74B8` (5:1). Logical CSS properties only. No PayBox logo, mascot, photo or bitmap |
 | `data.js` | Scenario - single source of truth (members, 7 seeded expenses, suggested 8th, KPI thresholds) |
 | `app.js` | Hash router, ledger maths (agorot integers, greedy fewest transfers), event log, PM metrics |
 | `assets/logo.svg` | Generic favicon only (a receipt cut into two halves, in the blue palette); not shown inside the app |

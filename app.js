@@ -63,6 +63,7 @@
       grid: '<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',
       box: '<path d="M4 10h16l-2 10H6z"/><path d="M8 10l2-5M16 10l-2-5M12 4v2"/>',
       history: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/><path d="M12 8v4l3 2"/>',
+      info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
       swap: '<path d="M7 7h12l-3-3M17 17H5l3 3"/><circle cx="5" cy="7" r="1.2"/><circle cx="19" cy="17" r="1.2"/>'
     }[n];
     return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
@@ -238,8 +239,10 @@
       return '<li><button class="tile' + (badge ? ' tile-new' : '') + '" ' + attrs + '><span class="tile-ic">' + icon(ic) + (badge ? '<span class="tbadge">' + badge + '</span>' : '') + '</span><span class="tile-l">' + label + '</span></button></li>';
     }
     return '<section class="home">' +
-      '<div class="balcard"><h1 tabindex="-1">היתרה שלי <span class="dummy">דמה</span></h1>' + money(walletBalance(), 'lg') +
-      '<button class="pillbtn" data-a="notdemo">טעינה ליתרה</button></div>' +
+      '<div class="balrow"><div class="balcard"><div class="bal-top"><h1 tabindex="-1">היתרה שלי</h1>' +
+      '<button class="bal-int" data-a="notdemo"><span>הצטרפות לריבית ' + icon('info') + '</span></button></div>' +
+      '<p class="balnum"><span dir="ltr">' + fmt(walletBalance()) + '</span><small>₪</small><span class="dummy">דמה</span></p>' +
+      '<button class="pillbtn" data-a="notdemo">טעינה ליתרה</button></div><div class="balpeek" aria-hidden="true"></div></div>' +
       '<div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>' +
       (pinned ? head + card : '') +
       '<h2 class="sec">פעולות באפליקציה</h2><ul class="tiles" aria-label="פעולות באפליקציה">' +
@@ -485,6 +488,7 @@
     var c = curStep();
     return '<div class="guide-head"><div><strong class="g-wm" lang="en">PayBox <span>Split</span></strong><span>מדריך הדגמה</span></div>' +
       '<button class="guide-toggle" data-a="guide" aria-expanded="' + S.guideOpen + '" aria-controls="guideBody">' + (c < STEPS.length ? 'שלב ' + (c + 1) + ' מתוך ' + STEPS.length : 'סיימתם') + '</button></div>' +
+      '<div class="demobar" id="demobar" role="group" aria-label="זמן בהדגמה"' + (S.route === 'start' ? ' hidden' : '') + '>' + vDemobar() + '</div>' +
       '<div class="guide-body" id="guideBody"><p class="guide-lead">אב-טיפוס של חשבון משותף לטיול בתוך PayBox: פותחים, רושמים הוצאות, רואים מי חייב למי וסוגרים את החובות.</p>' +
       '<ol class="steps">' + STEPS.map(function (s, i) {
         return '<li class="' + (s.done() ? 'done' : i === c ? 'cur' : '') + '"><span class="n">' + (s.done() ? icon('check') : i + 1) + '</span><span><strong>' + s.t + '</strong>' +
@@ -499,7 +503,7 @@
     var btn = '';
     if (S.created && S.invited && S.time === 'fri') btn = '<button class="skip-btn' + hint(2) + '" data-a="skip">דילוג למוצ״ש</button>';
     else if (S.time === 'sat' && S.viewerAdded) btn = '<button class="skip-btn' + hint(6) + '" data-a="skip">דילוג ליום ראשון</button>';
-    return '<span class="demo-tag">הדגמה</span><span class="demo-time">' + D.times[S.time].label + '</span>' + btn;
+    return '<span class="demo-tag">זמן בהדגמה</span><span class="demo-time">' + D.times[S.time].label + '</span>' + btn;
   }
 
   /* ---------- render ---------- */
@@ -525,8 +529,6 @@
     if (r === 'home') bn.innerHTML = [['בית', 'home', 'aria-current="page"'], ['יתרות וקבוצות', 'grid', 'data-a="notdemo"'], ['<span lang="en">PayBox Plus</span>', 'plus', 'data-a="notdemo"'], ['<span lang="en">MuniBox</span>', 'box', 'data-a="notdemo"'], ['היסטוריה', 'history', 'data-a="notdemo"']].map(function (b, i) {
       return '<button class="bn' + (i === 0 ? ' on' : '') + (i === 2 ? ' bn-plus' : '') + '" ' + b[2] + '><span class="bn-ic">' + icon(b[1]) + '</span><span>' + b[0] + '</span></button>';
     }).join('');
-    document.getElementById('demobar').innerHTML = vDemobar();
-    document.getElementById('demobar').hidden = r === 'start';
     var g = document.getElementById('guide'); g.innerHTML = vGuide(); g.classList.toggle('open', !!S.guideOpen);
     var pm = document.getElementById('pm'); pm.hidden = !S.pmOpen; if (S.pmOpen) pm.innerHTML = vPM();
     document.getElementById('stage').classList.toggle('pm-open', !!S.pmOpen);

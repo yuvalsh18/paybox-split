@@ -376,3 +376,92 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .bn.on { background: #E9ECEF; cursor: default; }
 .bn-plus .bn-ic { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; }
 .bn-plus .ic { width: 18px; height: 18px; color: #5CACE8; stroke-width: 3; }
+
+/* ---------- fidelity pass (reference: paybox-home-2026b.png) - lighter type, calmer shell ---------- */
+:root { font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; --ink: #2B3340; --slate: #3A4350; }
+body { font-weight: 400; }
+h1, h2, h3, h4 { font-weight: 500; }
+strong, b { font-weight: 600; }
+.btn, .skip-btn, .fab, .pillbtn { font-weight: 600; }
+.lbl { font-weight: 500; }
+.chip.on { font-weight: 500; }
+.sec { font-size: 19px; font-weight: 500; margin: 30px 0 10px; }
+.sechead { margin: 30px 0 6px; }
+.page-title { font-size: 22px; font-weight: 500; padding-top: 18px; }
+.bigmoney { font-weight: 400; font-size: 38px; }
+.money.lg { font-weight: 400; }
+.exp-row .money, .tr .money { font-weight: 500; }
+.tr-names { font-weight: 500; }
+.opentab-txt strong { font-weight: 500; }
+.promo h2 { font-weight: 600; }
+.recap strong { font-weight: 500; }
+.done-s h1 { font-weight: 600; }
+.kpi-val { font-weight: 500; }
+.g-wm { font-weight: 600; }
+/* status bar: iOS-like, time left, thin glyphs right */
+.statusbar { height: 44px; padding: 0 30px; font-size: 16px; font-weight: 600; color: #000; background: #fff; }
+.sb-ic { display: inline-flex; gap: 6px; align-items: center; }
+.sb-ic svg { fill: currentColor; }
+.notch { width: 118px; height: 30px; border-radius: 0 0 18px 18px; }
+/* header */
+.appbar { padding: 2px 8px 6px; }
+.wm { font-size: 22px; font-weight: 500; color: #2B3340; letter-spacing: 0; }
+.wm-sub { font-size: 15px; font-weight: 500; }
+.appbar .iconbtn .ic { width: 26px; height: 26px; stroke-width: 1.8; }
+/* balance card + peeking next card */
+.home { padding-top: 10px; }
+.balrow { display: flex; gap: 12px; overflow: hidden; margin-inline-end: -18px; padding: 4px 0 10px; }
+.balcard { flex: 0 0 calc(100% - 44px); background: linear-gradient(115deg, rgba(20, 60, 120, 0) 0, rgba(20, 60, 120, 0) 38%, rgba(20, 60, 120, .07) 38.2%), #3F95E0; border-radius: 22px; padding: 16px 18px; box-shadow: none; gap: 0; align-items: stretch; }
+.bal-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.balcard h1 { font-size: 24px; font-weight: 400; }
+.bal-int { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; border: 0; background: none; color: #fff; font-size: 19px; font-weight: 700; padding: 0; }
+.bal-int .ic { width: 22px; height: 22px; stroke-width: 1.8; }
+.balnum { display: flex; align-items: baseline; gap: 8px; margin: 0 0 10px; font-weight: 300; line-height: 1; }
+.balnum span { font-size: 60px; font-variant-numeric: tabular-nums; }
+.balnum small { font-size: 24px; }
+.pillbtn { align-self: flex-end; border-radius: 10px; padding: 8px 24px; font-size: 17px; color: var(--blue); }
+.balpeek { flex: 0 0 60%; border-radius: 22px; background: linear-gradient(180deg, #8A9AAC, #66778A); }
+.balrow + .dots { margin: 12px 0 0; }
+/* tiles */
+.tiles { gap: 20px; padding: 14px 2px 4px; }
+.tile { width: 70px; color: var(--slate); font-size: 15px; font-weight: 400; gap: 8px; }
+.tile-ic { width: 64px; height: 64px; border-radius: 20px; }
+.tile-ic .ic { width: 30px; height: 30px; stroke-width: 1.4; }
+.tile-new .tile-ic { background: #D6EBFB; box-shadow: none; }
+.tile-new .tile-l { font-weight: 400; color: var(--slate); }
+.tbadge { top: -12px; font-size: 12.5px; font-weight: 600; padding: 1px 10px; }
+/* promo */
+.promo { border-radius: 16px; }
+/* activity */
+.activity { box-shadow: none; }
+.act-main .money { font-weight: 300; font-size: 22px; }
+/* bottom nav */
+.bnav { background: rgba(255, 255, 255, .88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid #E1E4E8; box-shadow: 0 4px 18px rgba(43, 51, 64, .10); bottom: 24px; padding: 4px; }
+.bn { font-size: 12px; font-weight: 600; color: #2B3340; }
+.bn .ic { stroke-width: 1.4; width: 26px; height: 26px; color: var(--slate); }
+.bn.on { background: #E9EAEC; }
+.bn-plus .bn-ic { width: 30px; height: 30px; background: #2B3340; }
+.bn-plus .ic { color: #6EC1F5; width: 18px; height: 18px; stroke-width: 3; }
+/* disclaimer: one small light line at the very bottom */
+.phone-foot { background: none; font-size: 11px; padding: 4px 12px 6px; color: var(--muted); }
+.screen { padding-bottom: 80px; }
+.screen.r-home { padding-bottom: 120px; }
+/* toast: native-style snackbar near the bottom */
+.toast { top: auto; bottom: 110px; inset-inline: 24px; background: #2B3340; border-radius: 10px; font-size: 14px; padding: 10px 14px; box-shadow: 0 6px 18px rgba(0, 0, 0, .18); transform: translateY(10px); }
+.toast.show { transform: none; }
+/* demo time control now lives in the guide panel */
+.guide .demobar { margin: 12px 0 0; background: var(--blue-ll); }
+.demo-tag { font-weight: 600; }
+@media (max-width: 700px) {
+  .toast { top: auto; bottom: 100px; }
+  .guide .demobar { margin: 6px 0 2px; min-height: 44px; }
+  .phone { height: calc(100dvh - 112px); }
+}
+.balcard h1, .bal-int { white-space: nowrap; }
+.balnum .dummy { font-size: 12px; font-weight: 700; align-self: center; margin-inline-start: 4px; }
+.phone-foot { background: rgba(255, 255, 255, .96); }
+/* interest chip: regular weight on a darker tint so white small text stays 4.5:1 */
+.bal-int { font-size: 15px; font-weight: 400; }
+.bal-int span { display: inline-flex; align-items: center; gap: 5px; background: rgba(0, 40, 90, .25); border-radius: 99px; padding: 5px 10px; }
+.bal-int .ic { width: 18px; height: 18px; }
+.start-wm { font-weight: 500; }
