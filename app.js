@@ -57,6 +57,12 @@
       request: '<path d="M12 3v12M7 10l5 5 5-5" /><path d="M4 17v3h16v-3" />',
       groups: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3.2 3.2 0 010 6.2M21 20c0-2.7-1.7-5-4-5.8"/>',
       receipt: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+      loan: '<circle cx="12" cy="12" r="8.5"/><path d="M9.5 8v5.5a1.5 1.5 0 001.5 1.5M14.5 16v-5.5A1.5 1.5 0 0013 9"/>',
+      menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+      home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>',
+      grid: '<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',
+      box: '<path d="M4 10h16l-2 10H6z"/><path d="M8 10l2-5M16 10l-2-5M12 4v2"/>',
+      history: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/><path d="M12 8v4l3 2"/>',
       swap: '<path d="M7 7h12l-3-3M17 17H5l3 3"/><circle cx="5" cy="7" r="1.2"/><circle cx="19" cy="17" r="1.2"/>'
     }[n];
     return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
@@ -152,9 +158,9 @@
   /* ---------- screens ---------- */
   // text wordmark only - no PayBox logo/mascot bitmap
   function brand(sub) { return '<div class="brand"><span class="wm" lang="en">PayBox</span>' + (sub ? '<span class="wm-sub" lang="en">' + sub + '</span>' : '') + '</div>'; }
-  function appbar(back, extra, sub) {
+  function appbar(back, extra, sub, start) {
     return '<header class="appbar">' +
-      (back ? '<button class="iconbtn" data-a="nav" data-to="' + back + '" aria-label="חזרה">' + icon('back') + '</button>' : '<span class="iconbtn-sp"></span>') +
+      (back ? '<button class="iconbtn" data-a="nav" data-to="' + back + '" aria-label="חזרה">' + icon('back') + '</button>' : start || '<span class="iconbtn-sp"></span>') +
       brand(sub) + (extra || '<span class="iconbtn-sp"></span>') + '</header>';
   }
   // the blue app bar is moved into the fixed #appbar slot by render(); the page title stays in the screen
@@ -191,11 +197,18 @@
   function vHome() {
     var card;
     if (!S.created) {
-      card = '<article class="card promo">' +
+      // own CSS/SVG illustration only - no photos or copied banners
+      card = '<article class="promo"><div class="promo-txt">' +
         '<p class="eyebrow">חדש: PayBox Split</p>' +
         '<h2>יוצאים לטיול?</h2>' +
         '<p>פותחים חשבון משותף, כל אחד רושם מה שילם, ואנחנו עושים את החשבון.</p>' +
-        '<button class="btn coral' + hint(0) + '" data-a="nav" data-to="create">פותחים חשבון</button></article>';
+        '<button class="btn yellow' + hint(0) + '" data-a="nav" data-to="create">פותחים חשבון' + icon('chev') + '</button></div>' +
+        '<svg class="promo-art" viewBox="0 0 110 130" aria-hidden="true">' +
+        '<rect x="22" y="14" width="62" height="86" rx="8" fill="#fff"/><path d="M22 92 l8 8 8-8 8 8 8-8 8 8 8-8 8 8 6-6 V100 H22z" fill="#fff"/>' +
+        '<rect x="32" y="28" width="30" height="6" rx="3" fill="#BFD9F5"/><rect x="32" y="42" width="42" height="6" rx="3" fill="#BFD9F5"/><rect x="32" y="56" width="22" height="6" rx="3" fill="#BFD9F5"/>' +
+        '<path d="M53 8 V108" stroke="#F7C92F" stroke-width="3" stroke-dasharray="6 5"/>' +
+        '<circle cx="20" cy="108" r="13" fill="#F7C92F"/><text x="20" y="113" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">₪</text>' +
+        '<circle cx="88" cy="92" r="11" fill="#E0364F"/><circle cx="96" cy="112" r="9" fill="#8FC3F2"/></svg></article>';
     } else if (!S.closed) {
       var sc = settledCount(), debts = myDebts(), line, cta = '';
       if (S.time === 'fri') line = 'החשבון פתוח - מחכים להוצאות הראשונות';
@@ -220,14 +233,21 @@
     function act(title, amt, date, dot) {
       return '<li><span class="act-main"><span>' + title + '</span>' + money(amt) + '</span><span class="act-date">' + date + '<i class="' + dot + '" aria-hidden="true"></i></span></li>';
     }
+    var pinned = S.created && !S.closed; // Zeigarnik: an open tab stays pinned right under the balance
+    function tile(label, ic, attrs, badge) {
+      return '<li><button class="tile' + (badge ? ' tile-new' : '') + '" ' + attrs + '><span class="tile-ic">' + icon(ic) + (badge ? '<span class="tbadge">' + badge + '</span>' : '') + '</span><span class="tile-l">' + label + '</span></button></li>';
+    }
     return '<section class="home">' +
-      '<div class="home-top"><p class="muted">שלום יובל</p><h1 tabindex="-1">יתרה ' + money(walletBalance(), 'lg') + ' <span class="dummy">דמה</span></h1></div>' +
-      '<nav class="cats quick" aria-label="פעולות מהירות">' +
-      [['העברה', 'transfer'], ['בקשה', 'request'], ['קבוצות', 'groups']].map(function (q) { return '<button class="cat q" data-a="notdemo">' + icon(q[1]) + q[0] + '</button>'; }).join('') +
-      '<button class="cat q q-split on" data-a="nav" data-to="' + (S.created ? 'tab' : 'create') + '">' + icon('receipt') + '<span lang="en">Split</span></button></nav>' +
-      head + card +
+      '<div class="balcard"><h1 tabindex="-1">היתרה שלי <span class="dummy">דמה</span></h1>' + money(walletBalance(), 'lg') +
+      '<button class="pillbtn" data-a="notdemo">טעינה ליתרה</button></div>' +
       '<div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>' +
-      secHead('פעולות אחרונות', null, slink('כל הפעולות', 'data-a="notdemo"')) + '<ul class="activity">' +
+      (pinned ? head + card : '') +
+      '<h2 class="sec">פעולות באפליקציה</h2><ul class="tiles" aria-label="פעולות באפליקציה">' +
+      tile('העברה', 'transfer', 'data-a="notdemo"') +
+      tile('<span lang="en">PayBox Split</span>', 'receipt', 'data-a="nav" data-to="' + (S.created ? 'tab' : 'create') + '"', 'חדש') +
+      tile('קבוצה', 'groups', 'data-a="notdemo"') + tile('הלוואה', 'loan', 'data-a="notdemo"') + '</ul>' +
+      (pinned ? '' : (S.created ? head : '<h2 class="sec">כדאי לדעת</h2>') + card) +
+      secHead('פעולות אחרונות', null, slink('לכל הפעולות', 'data-a="notdemo"')) + '<ul class="activity">' +
       S.payments.filter(function (p) { return p.from === VIEWER && p.rail === 'paybox'; }).map(function (p) { return act(icon('check') + ' תשלום ל' + esc(name(p.to)) + ' - ' + esc(D.tab.name), p.amount, '18.10.26', ''); }).join('') +
       act('העברה מאמא (דמה)', 20000, '12.10.26', 'in') + act('קפה במשרד - קבוצת עבודה (דמה)', 1800, '08.10.26', '') + '</ul>' +
       '</section>';
@@ -498,8 +518,13 @@
     document.getElementById('phone').setAttribute('data-route', r);
     var slot = document.getElementById('appbar'), hb = scr.querySelector('.appbar');
     if (hb) { slot.innerHTML = ''; slot.appendChild(hb); }
-    else slot.innerHTML = r === 'home' ? appbar(null, null, '') : r === 'done' ? appbar(null, null, 'Split') : '';
+    else slot.innerHTML = r === 'home' ? appbar(null, null, '', '<button class="iconbtn" data-a="notdemo" aria-label="תפריט">' + icon('menu') + '</button>') : r === 'done' ? appbar(null, null, 'Split') : '';
     slot.hidden = !slot.firstChild;
+    var bn = document.getElementById('bnav');
+    bn.hidden = r !== 'home';
+    if (r === 'home') bn.innerHTML = [['בית', 'home', 'aria-current="page"'], ['יתרות וקבוצות', 'grid', 'data-a="notdemo"'], ['<span lang="en">PayBox Plus</span>', 'plus', 'data-a="notdemo"'], ['<span lang="en">MuniBox</span>', 'box', 'data-a="notdemo"'], ['היסטוריה', 'history', 'data-a="notdemo"']].map(function (b, i) {
+      return '<button class="bn' + (i === 0 ? ' on' : '') + (i === 2 ? ' bn-plus' : '') + '" ' + b[2] + '><span class="bn-ic">' + icon(b[1]) + '</span><span>' + b[0] + '</span></button>';
+    }).join('');
     document.getElementById('demobar').innerHTML = vDemobar();
     document.getElementById('demobar').hidden = r === 'start';
     var g = document.getElementById('guide'); g.innerHTML = vGuide(); g.classList.toggle('open', !!S.guideOpen);
@@ -533,7 +558,7 @@
 
   /* ---------- sheets & toast ---------- */
   var lastFocus = null, payTimer = null;
-  function setInert(on) { ['screen', 'appbar', 'demobar', 'guide', 'pm'].forEach(function (id) { var el = document.getElementById(id); if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }); }
+  function setInert(on) { ['screen', 'appbar', 'bnav', 'demobar', 'guide', 'pm'].forEach(function (id) { var el = document.getElementById(id); if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }); }
   function sheet(html) {
     var w = document.getElementById('sheetWrap');
     if (w.hidden) lastFocus = document.activeElement;

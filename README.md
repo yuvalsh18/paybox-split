@@ -12,7 +12,7 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 | File | What |
 |---|---|
 | `index.html` | Shell: guide, phone, PM panel, disclaimers |
-| `styles.css` | PayBox-style look (team decision 2026-09-25, from a PayBox app screenshot): sky header `#1B9BDF` (sampled `#20A9ED`, darkened so the large white header text passes 3:1), buttons/links/badges `#0A74B8` (5:1 with white), white cards with light grey border, thin-line blue category icons with an underlined active item, section headers with a blue link and count badge, dated history rows. Rubik. Logical CSS properties only. No PayBox logo, mascot or bitmap - the header is a plain text wordmark "PayBox / Split" |
+| `styles.css` | PayBox look, aligned to the real PayBox home screen (team decision 2026-09-25, `assets/reference/paybox-home-2026.png`): white header with a navy text wordmark "PayBox" (hamburger on home, back chevron + "Split" on inner screens), blue gradient balance card `#3A8DDA`->`#2B79C8` (sampled `#4CA0E7`, darkened so white large text is 3.5:1), light-blue tiles `#EAF5FD` with line icons `#2F84D6` and a red "חדש" badge `#D42A45` (sampled `#E0364F`, darkened for 5:1) on the PayBox Split tile, a "כדאי לדעת" promo with its own SVG illustration and a yellow `#F7C92F` pill CTA, a floating 5-item bottom bar on home, navy text `#1F2A44`, buttons/links `#0A74B8` (5:1). Rubik. Logical CSS properties only. No PayBox logo, mascot, photo or bitmap |
 | `data.js` | Scenario - single source of truth (members, 7 seeded expenses, suggested 8th, KPI thresholds) |
 | `app.js` | Hash router, ledger maths (agorot integers, greedy fewest transfers), event log, PM metrics |
 | `assets/logo.svg` | Generic favicon only (a receipt cut into two halves, in the blue palette); not shown inside the app |
@@ -33,7 +33,7 @@ Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an offici
 | Principle | Screen | Concrete UI element |
 |---|---|---|
 | Default effect (Thaler & Sunstein, 2008) | `#/add` | Payer "אני" and "חלוקה שווה בין כולם - מסומן מראש" are preselected; amount is the only thing to check. The event `expense_added` records `default_split` |
-| Zeigarnik effect (Zeigarnik, 1927) | `#/home` | The open-tab card with an unfinished ring (x/6) stays pinned at the top until every balance is zero, then disappears. It is the return trigger - there is no push reminder in the MVP |
+| Zeigarnik effect (Zeigarnik, 1927) | `#/home` | The open-tab card with an unfinished ring (x/6) stays pinned right under the balance card until every balance is zero, then disappears. It is the return trigger - there is no push reminder in the MVP |
 | Social proof (Cialdini, 2021) | `#/tab`, `#/balances`, `#/home` | "4 מתוך 6 כבר סגרו - נשאר רק החוב שלך" with ticked avatars; the ring shows the same count. Hidden while nobody has settled (a "0 of 6" strip would work against the principle) |
 | Peak-end rule (Kahneman et al., 1993) | `#/done` | Confetti, "סגרנו!", trip recap (days, people, total, priciest item, 5 transfers vs 38) and "פותחים חשבון לטיול הבא" |
 | Face-saving (design rationale) | `#/balances` | Neutral rows ("פתוח"), nobody is labelled late; only the creditor can mark a debt settled |
