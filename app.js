@@ -512,7 +512,7 @@
       '<div class="guide-actions"><button class="btn primary wide" data-a="pm" aria-pressed="' + S.pmOpen + '">' + icon('chart') + ' מבט מנהל מוצר</button>' +
       '<button class="btn ghost wide" data-a="reset">' + icon('reset') + ' איפוס הדגמה</button></div>' +
       '<p class="guide-foot">אב-טיפוס אקדמי - קונספט של סטודנטים, לא מוצר רשמי של PayBox</p>' +
-      '<p class="guide-foot">גרסה 2, אחרי מבחני שמישות (3.10.2026) · <a href="v1/">לגרסה 1</a></p></div>';
+      '<p class="guide-foot">גרסה 2, אחרי מבחני שמישות (3.10.2026) · <button class="linkbtn" data-a="whatsnew">מה חדש</button> · <a href="v1/">לגרסה 1</a></p></div>';
   }
   function vDemobar() {
     var btn = '';
@@ -602,6 +602,19 @@
         : '<p class="err">אין מספיק יתרה בארנק הדמה לתשלום הזה</p>') +
       '<p class="muted small center">שילמת במזומן? מי שמגיע לו הכסף מסמן את החוב כסגור.</p>' +
       '<button class="btn link" data-a="closesheet">ביטול</button>');
+  }
+
+  // v2 splash: what changed after the usability sessions; shown once per browser, reopened from the guide
+  var WN_KEY = 'pbsplit-whatsnew-v2';
+  function whatsNew() {
+    try { window.localStorage.setItem(WN_KEY, '1'); } catch (e) { /* ignore */ }
+    function item(ic, t, d) { return '<li><span class="wn-ic">' + icon(ic) + '</span><span><strong>' + t + '</strong><span class="muted small">' + d + '</span></span></li>'; }
+    sheet('<p class="wn-ver">גרסה 2</p><h2 id="sheetTitle">מה חדש ב-<bdi lang="en">PayBox Split</bdi></h2><ul class="wn">' +
+      item('receipt', 'רואים איך החוב מחושב', 'כמה שילמת על הקבוצה, מה החלק שלך בהוצאות, ומה כבר העברת.') +
+      item('check', 'סימון במזומן ברור יותר', 'כתוב בדיוק איזה חוב נסגר, ושהחוב שלך לא משתנה.') +
+      item('back', 'קל לחזור להדגמה', 'לחצת על משהו שלא חלק מההדגמה? ההודעה מחזירה אותך ל-PayBox Split.') +
+      '</ul><p class="muted small center">השינויים בעקבות מבחני שמישות עם 6 משתתפים (3.10.2026) · <a href="v1/">לגרסה 1</a></p>' +
+      '<button class="btn primary big wide" data-a="closesheet">הבנתי</button>');
   }
 
   /* ---------- actions ---------- */
@@ -725,7 +738,8 @@
       try { window.localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
       mem = null; S = fresh(); closeSheet(); lastRoute = null; toast('ההדגמה אופסה'); go('start');
     },
-    closesheet: function () { closeSheet(); }
+    closesheet: function () { closeSheet(); },
+    whatsnew: function () { whatsNew(); }
   };
 
   document.addEventListener('click', function (ev) {
@@ -758,5 +772,7 @@
   window.addEventListener('hashchange', render);
   if (!location.hash) history.replaceState(null, '', '#/' + (S.route || 'start'));
   render();
+  var wnSeen = false; try { wnSeen = !!window.localStorage.getItem(WN_KEY); } catch (e) { /* ignore */ }
+  if (!wnSeen) whatsNew();
   window.__split = { state: function () { return S; }, transfers: transfers, balances: balances };
 })();
