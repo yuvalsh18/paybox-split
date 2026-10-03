@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var D = window.SPLIT_DATA;
-  var KEY = 'pbsplit-demo-v2';
+  var KEY = 'pbsplit-demo-v1-frozen';
   var VIEWER = D.viewerId;
   var M = {}; D.members.forEach(function (m) { M[m.id] = m; });
   var IDS = D.members.map(function (m) { return m.id; });
@@ -303,21 +303,9 @@
     else { label = 'אצלך הכל מאוזן'; amt = ''; cls = 'even'; }
     var delta = '';
     if (S.animFrom != null && amt !== '') delta = '<span class="delta">עודכן: ירד ב-' + money(S.animFrom - amt) + '</span>';
-    // v2 (usability, task 3): show how the net is built - "what I paid" vs "my share" were being mixed up
-    var calc = '';
-    if (S.expenses.length) {
-      var paid = 0, share = 0, sent = 0, got = 0;
-      S.expenses.forEach(function (e) { if (e.payer === VIEWER) paid += Math.round(e.amount * 100); var sh = shares(e); if (sh[VIEWER]) share += sh[VIEWER]; });
-      S.payments.forEach(function (p) { if (p.from === VIEWER) sent += p.amount; if (p.to === VIEWER) got += p.amount; });
-      calc = '<dl class="calc"><div><dt>שילמת על הקבוצה</dt><dd>' + money(paid) + '</dd></div>' +
-        '<div><dt>החלק שלך בהוצאות</dt><dd>' + money(share) + '</dd></div>' +
-        (sent ? '<div><dt>כבר העברת</dt><dd>' + money(sent) + '</dd></div>' : '') +
-        (got ? '<div><dt>כבר קיבלת</dt><dd>' + money(got) + '</dd></div>' : '') + '</dl>' +
-        (cls === 'owe' ? '<p class="calc-why">שילמת פחות מהחלק שלך, אז ההפרש הוא החוב שלך</p>' : cls === 'get' ? '<p class="calc-why">שילמת יותר מהחלק שלך, אז ההפרש מגיע לך</p>' : '');
-    }
     return '<div class="mycard ' + cls + '"><span>' + label + '</span>' +
       (amt !== '' ? '<strong class="bigmoney" id="myAmt" data-from="' + (S.animFrom != null ? S.animFrom : '') + '" data-to="' + amt + '">' + money(S.animFrom != null ? S.animFrom : amt) + '</strong>' : '') +
-      delta + calc + '</div>';
+      delta + '</div>';
   }
 
   function vTab() {
@@ -421,7 +409,6 @@
       body = '<p class="viewing">עכשיו אנחנו בטלפון של ' + esc(cred) + '. אריאל נתן לה ' + money(t.amount) + ' במזומן.</p>' +
         '<div class="card"><div class="cred-row">' + avatar('roni') + '<span><strong>אריאל</strong><span class="muted small"> חייב לך</span></span>' + money(t.amount) + '</div>' +
         '<p>קיבלת את הכסף מחוץ ל-PayBox?</p>' +
-        '<p class="effect">הסימון סוגר רק את החוב של אריאל ל' + esc(cred) + ' (' + money(t.amount) + '). החוב של יובל לא משתנה.</p>' +
         '<button class="btn primary big' + hint(5) + '" data-a="dmark" data-rail="cash">קיבלתי במזומן - סמן כסגור</button></div>' +
         '<p class="muted small">רק מי שמגיע לו הכסף יכול לסמן חוב כסגור - לא החייב.</p>';
     }
@@ -511,8 +498,7 @@
       '<li class="' + (c === STEPS.length ? 'cur' : '') + '"><span class="n">9</span><span><strong>מבט מנהל מוצר</strong>' + (c === STEPS.length ? '<span class="h">איך ההדגמה מודדת את ההשערה.</span>' : '') + '</span></li></ol>' +
       '<div class="guide-actions"><button class="btn primary wide" data-a="pm" aria-pressed="' + S.pmOpen + '">' + icon('chart') + ' מבט מנהל מוצר</button>' +
       '<button class="btn ghost wide" data-a="reset">' + icon('reset') + ' איפוס הדגמה</button></div>' +
-      '<p class="guide-foot">אב-טיפוס אקדמי - קונספט של סטודנטים, לא מוצר רשמי של PayBox</p>' +
-      '<p class="guide-foot">גרסה 2, אחרי מבחני שמישות (3.10.2026) · <a href="v1/">לגרסה 1</a></p></div>';
+      '<p class="guide-foot">אב-טיפוס אקדמי - קונספט של סטודנטים, לא מוצר רשמי של PayBox</p></div>';
   }
   function vDemobar() {
     var btn = '';
@@ -634,7 +620,7 @@
   var A = {
     begin: function () { go('home'); },
     nav: function (el) { closeSheet(); if (el.dataset.to === 'balances') S.tabView = 'balances'; else if (el.dataset.to === 'tab') S.tabView = S.tabView || 'expenses'; go(el.dataset.to === 'balances' ? 'balances' : el.dataset.to); },
-    notdemo: function () { toast('הכפתור הזה לא חלק מההדגמה. ממשיכים מ-PayBox Split בדף הבית'); },
+    notdemo: function () { toast('הכפתור הזה לא חלק מההדגמה - רק PayBox Split'); },
     create: function () { if (!S.created) { S.created = true; track('tab_created', { members: IDS.length, end: D.tab.end }); } go('invite'); },
     invite: function () { if (!S.invited) { S.invited = true; track('invite_sent', { channel: 'whatsapp' }); } toast('נשלח לקבוצה (דמה)'); render(); },
     copy: function () { toast('הקישור הועתק (דמה)'); },
@@ -688,9 +674,7 @@
     },
     mark: function (el) {
       var from = el.dataset.from;
-      var tm = owedToMe().filter(function (x) { return x.from === from; })[0];
-      sheet('<h2 id="sheetTitle">' + esc(name(from)) + ' שילם מחוץ ל-PayBox?</h2>' +
-        (tm ? '<p class="effect">הסימון סוגר את החוב של ' + esc(name(from)) + ' אליך (' + money(tm.amount) + '). החובות של השאר לא משתנים.</p>' : '') + '<button class="btn primary wide" data-a="vmark" data-from="' + from + '" data-rail="cash">קיבלתי במזומן - סמן כסגור</button>' +
+      sheet('<h2 id="sheetTitle">' + esc(name(from)) + ' שילם מחוץ ל-PayBox?</h2><button class="btn primary wide" data-a="vmark" data-from="' + from + '" data-rail="cash">קיבלתי במזומן - סמן כסגור</button>' +
         '<button class="btn link" data-a="closesheet">ביטול</button>');
     },
     vmark: function (el) {
@@ -705,11 +689,9 @@
     },
     dmark: function (el) {
       var t = transfers().filter(function (x) { return x.from === 'roni'; })[0]; if (!t) return;
-      var mineBefore = myDebts().reduce(function (n, x) { return n + x.amount; }, 0);
       S.payments.push({ from: 'roni', to: t.to, amount: t.amount, rail: el.dataset.rail });
       S.creditorMarked = true; track('marked_settled', { from: 'roni', to: t.to, rail: el.dataset.rail });
-      var mineAfter = myDebts().reduce(function (n, x) { return n + x.amount; }, 0);
-      toast('החוב של אריאל ל' + name(t.to) + ' נסגר' + (mineBefore === mineAfter ? ' - החוב שלך לא השתנה' : '')); S.tabView = 'balances';
+      toast('החוב של אריאל סומן כסגור'); S.tabView = 'balances';
       if (checkClosed()) go('done'); else go('balances');
     },
     nexttab: function () { if (!S.nextTabIntent) { S.nextTabIntent = true; track('next_tab_cta'); } toast('בגרסה המלאה נפתח כאן חשבון חדש. נספר במבט מנהל מוצר כסימן להרגל'); render(); },

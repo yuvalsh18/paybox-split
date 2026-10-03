@@ -2,6 +2,14 @@
 
 Academic prototype, Hebrew RTL, mobile-first. A student concept, **not an official PayBox product**. All data, people and payments are fake. There are no real login, payment or contact fields.
 
+## Versions
+| Version | Link | What changed |
+|---|---|---|
+| v2 (2026-10-03) | [/](https://yuvalsh18.github.io/paybox-split/) | After 6 usability sessions (task 3 "who owes whom" was the only task below SEQ 5): the "החוב שלך" card shows how the net is built (paid for the group / your share / already sent); the cash mark says which debt it closes and that Yuval's debt does not change; tapping a non-demo button points back to PayBox Split |
+| v1 (2026-09-25) | [/v1/](https://yuvalsh18.github.io/paybox-split/v1/) | The version the participants tested, frozen as-is |
+
+Git tags `v1` and `v2` mark the same two states.
+
 ## Run
 - Double-click `index.html`, or
 - `python -m http.server 8765` inside this folder and open http://localhost:8765

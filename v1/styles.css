@@ -193,12 +193,6 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .bigmoney { font-size: 34px; font-weight: 700; display: block; }
 .bigmoney.flash { animation: flash .8s; }
 @keyframes flash { 50% { color: var(--sky); } }
-/* v2: how the net is built (usability task 3) + what a cash mark changes (task 4) */
-.calc { width: 100%; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); display: grid; gap: 4px; font-size: 14px; }
-.calc div { display: flex; justify-content: space-between; gap: 8px; }
-.calc dt { color: var(--muted); } .calc dd { margin: 0; font-weight: 500; }
-.calc-why { font-size: 13px; color: var(--muted); margin-top: 6px !important; }
-.effect { background: var(--blue-ll); border: 1px solid #D5E9F6; border-radius: 10px; padding: 8px 12px; font-size: 14px; margin: 8px 0 12px; }
 .delta { background: var(--blue-l); color: var(--blue-d); border-radius: 99px; font-size: 13px; padding: 2px 10px; font-weight: 700; margin-top: 4px; }
 .social { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 14.5px; font-weight: 500; }
 .avs { display: flex; }
